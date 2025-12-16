@@ -47,7 +47,7 @@ Route::prefix('v1')->group(function () {
 
         //Formularios
         Route::get('/leads', [LeadController::class, 'index']);
-        Route::get('/leads/{id}', [LeadController::class, 'show']);
         Route::get('/leads/stats', [LeadController::class, 'stats']);
+        Route::get('/leads/{id}', [LeadController::class, 'show']);
     });
 });
