@@ -4,19 +4,22 @@
   </a>
 </p>
 
-# Perfect Esthetic – Backend API
+# Cold Esthetic – Backend API
 
-Backend API desarrollado en **Laravel 12** para la gestión de contenidos de una clínica estética.
-El sistema permite administrar información con imágenes tipo **Before & After**, asegurando
-un manejo correcto del almacenamiento, seguridad y consistencia de los datos.
+Backend API desarrollado en **Laravel 12** para la gestión de datos y contenidos de la clínica estética **Cold Esthetic**.  
+El sistema permite administrar información visual (imágenes tipo _Before & After_) y datos de formularios de contacto, asegurando un manejo correcto del almacenamiento, seguridad y consistencia de los registros.
 
 ---
 
 ## 📌 Descripción del proyecto
 
-Este backend proporciona una **API REST** que centraliza la administración de contenidos visuales
-y datos asociados, facilitando su consumo desde aplicaciones frontend web o móviles.
-Está orientado a un uso administrativo y público controlado.
+Este backend proporciona una **API REST** que centraliza la administración de:
+
+-   Contenidos visuales de la clínica (Before & After).
+-   Formularios de contacto donde los usuarios ingresan sus datos personales, seleccionan un servicio de interés y envían mensajes opcionales.
+-   Registro y análisis de leads para estadísticas y seguimiento comercial.
+
+El sistema está orientado a un uso administrativo y público controlado, integrándose fácilmente con aplicaciones frontend web o móviles.
 
 ---
 
@@ -27,21 +30,26 @@ Está orientado a un uso administrativo y público controlado.
 -   Laravel Eloquent ORM
 -   MySQL
 -   API REST
--   Laravel Sanctum
--   Laravel Storage
+-   Laravel Sanctum (autenticación)
+-   Laravel Storage (gestión de archivos)
 -   UUID
+-   Faker (generación de datos de prueba con factories y seeders)
 
 ---
 
 ## ⚙️ Funcionalidades principales
 
--   Autenticación de administrador
--   Gestión de contenidos (CRUD)
--   Subida y almacenamiento de imágenes (Before / After)
--   Actualización parcial de registros
--   Eliminación automática de archivos asociados
--   Exposición pública de contenidos visuales
--   Manejo de validaciones y respuestas JSON
+-   Autenticación de administrador.
+-   Gestión de contenidos visuales (CRUD de imágenes Before/After).
+-   Subida y almacenamiento seguro de imágenes.
+-   Manejo de formularios de contacto:
+    -   Registro de nombre, teléfono, correo electrónico, servicio de interés y mensaje.
+    -   Validación de datos y respuestas JSON.
+    -   Almacenamiento para análisis y estadísticas.
+-   Estadísticas de servicios más solicitados.
+-   Actualización parcial de registros.
+-   Eliminación automática de archivos asociados.
+-   Exposición pública de contenidos visuales.
 
 ---
 
@@ -74,27 +82,6 @@ php artisan serve
 ```
 
 Configurar las variables de entorno en el archivo .env según el entorno de ejecución.
-
----
-
-## 🔗 Endpoints principales
-
-| Método | Endpoint                    | Descripción                 |
-| ------ | --------------------------- | --------------------------- |
-| GET    | `/api/v1/before-after`      | Obtener contenidos públicos |
-| POST   | `/api/v1/before-after`      | Crear contenido             |
-| PUT    | `/api/v1/before-after/{id}` | Actualizar contenido        |
-| DELETE | `/api/v1/before-after/{id}` | Eliminar contenido          |
-
----
-
-## 🗑 Eliminación de contenidos
-
-Al eliminar un registro:
-
--   Se elimina el registro de la base de datos
--   Se eliminan automáticamente las imágenes asociadas del almacenamiento
--   Esto garantiza consistencia entre datos y archivos físicos.
 
 ---
 

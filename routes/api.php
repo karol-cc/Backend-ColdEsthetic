@@ -1,9 +1,9 @@
 ﻿<?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\PersonController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\API\BeforeAfterController;
+use App\Http\Controllers\API\LeadController;
 
 
 /*|--------------------------------------------------------------------------
@@ -21,25 +21,18 @@ use App\Http\Controllers\API\BeforeAfterController;
 // Ruta de prueba simple 
 Route::get('/test', function () {
     return response()->json([
-        'message' => 'API Perfect Esthetic funcionando',
+        'message' => 'API Cold Esthetic funcionando',
         'version' => 'v1'
     ]);
-});
-// Rutas de pruebas - Person
-Route::prefix('v1/persons')->group(function () {
-    Route::get('/',[ PersonController::class, 'get']);
-    Route::post('/', [ PersonController::class, 'create']);
-    Route::get('/{id}', [ PersonController::class, 'getById']);
-    Route::put('/{id}', [ PersonController::class, 'update']);
-    Route::delete('/{id}', [ PersonController::class, 'delete']);
 });
 /*-------------------------------------------------------*/
 
 
 Route::prefix('v1')->group(function () {
 
-    // Ruta pública
+    // Rutas públicas
     Route::get('/before-after', [BeforeAfterController::class, 'index']);
+    Route::post('/leads', [LeadController::class, 'create']);
 
     // Register y Login ADMIN
     Route::post('/register', [AuthController::class, 'register']);
@@ -47,8 +40,14 @@ Route::prefix('v1')->group(function () {
 
     // Rutas admin
     Route::middleware('auth:sanctum')->group(function () {
+        //Contenidos
         Route::post('/before-after', [BeforeAfterController::class, 'store']);
         Route::put('/before-after/{id}', [BeforeAfterController::class, 'update']);
         Route::delete('/before-after/{id}', [BeforeAfterController::class, 'destroy']);
+
+        //Formularios
+        Route::get('/leads', [LeadController::class, 'index']);
+        Route::get('/leads/{id}', [LeadController::class, 'show']);
+        Route::get('/leads/stats', [LeadController::class, 'stats']);
     });
 });
