@@ -2,8 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\API\BeforeAfterController;
-use App\Http\Controllers\API\LeadController;
+use App\Http\Controllers\API\ClinicalImageController;
 
 
 /*|--------------------------------------------------------------------------
@@ -31,8 +30,7 @@ Route::get('/test', function () {
 Route::prefix('v1')->group(function () {
 
     // Rutas públicas
-    Route::get('/before-after', [BeforeAfterController::class, 'index']);
-    Route::post('/leads', [LeadController::class, 'create']);
+    Route::get('/before-after', [ClinicalImageController::class, 'index']);
 
     // Register y Login ADMIN
     Route::post('/register', [AuthController::class, 'register']);
@@ -40,14 +38,9 @@ Route::prefix('v1')->group(function () {
 
     // Rutas admin
     Route::middleware('auth:sanctum')->group(function () {
-        //Contenidos
-        Route::post('/before-after', [BeforeAfterController::class, 'store']);
-        Route::put('/before-after/{id}', [BeforeAfterController::class, 'update']);
-        Route::delete('/before-after/{id}', [BeforeAfterController::class, 'destroy']);
-
-        //Formularios
-        Route::get('/leads', [LeadController::class, 'index']);
-        Route::get('/leads/stats', [LeadController::class, 'stats']);
-        Route::get('/leads/{id}', [LeadController::class, 'show']);
+        //Imágenes Clínicas
+        Route::post('/before-after', [ClinicalImageController::class, 'store']);
+        Route::put('/before-after/{id}', [ClinicalImageController::class, 'update']);
+        Route::delete('/before-after/{id}', [ClinicalImageController::class, 'destroy']);
     });
 });

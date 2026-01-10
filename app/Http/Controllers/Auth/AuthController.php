@@ -18,7 +18,6 @@ class AuthController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name'  => 'required|string|max:255',
             'cellphone'  => 'required|string|max:20',
-            'role'       => 'required|string',
             'email'      => 'required|email|unique:users',
             'password'   => 'required|min:6'
         ]);
@@ -28,13 +27,14 @@ class AuthController extends Controller
             'first_name' => $request->first_name,
             'last_name'  => $request->last_name,
             'cellphone'  => $request->cellphone,
-            'role'       => $request->role, // admin
+            'brand_name' => config('app.brand_name'),
+            'brand_slug' => config('app.brand_slug'),
             'email'      => $request->email,
             'password'   => $request->password,
         ]);
 
         return response()->json([
-            'message' => 'Admin creado correctamente'
+            'message' => 'Admin creado correctamente!!'
         ], 201);
     }
 
@@ -58,7 +58,7 @@ class AuthController extends Controller
 
         return response()->json([
             'token' => $token,
-            'message' => 'Inicio de sesión exitosa'
+            'message' => 'Inicio de sesión exitosa!!'
         ]);
     }
 }

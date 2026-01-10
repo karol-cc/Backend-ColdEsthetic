@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\BeforeAfter;
+use App\Models\ClinicalImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class BeforeAfterController extends Controller
+class ClinicalImageController extends Controller
 {
     // GET - obtener todos
     public function index()
@@ -100,7 +100,7 @@ class BeforeAfterController extends Controller
             $item->save();
             
             return response()->json([
-                'message' => 'Contenido actualizado correctamente',
+                'message' => 'Contenido actualizado correctamente!!',
                 'data' => $item
             ], 200);
         } catch (\Throwable $th) {
