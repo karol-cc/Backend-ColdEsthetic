@@ -4,7 +4,7 @@
   </a>
 </p>
 
-# Cold Esthetic – Backend API
+# Cold Esthetic – Backend API.
 
 Backend API desarrollado en **Laravel 12** para la gestión de datos y contenidos de la clínica estética **Cold Esthetic**.  
 El sistema permite administrar información visual (imágenes tipo _Before & After_) y datos de formularios de contacto, asegurando un manejo correcto del almacenamiento, seguridad y consistencia de los registros.
