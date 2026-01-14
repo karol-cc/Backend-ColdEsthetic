@@ -35,6 +35,11 @@ class PatientController extends Controller
     {
         $data = $request->validated();
 
+        $userId = auth()->id();
+        if (!$userId) {
+            return response()->json(['message' => 'No autenticado'], 401);
+        }
+
         $weight = (float) $data['weight'];
         $height = (float) $data['height'];
         $bmi = null;
@@ -44,7 +49,8 @@ class PatientController extends Controller
         }
 
         $patient = Patient::create([
-            'user_id' => (int) $data['user_id'],
+            'user_id' => (int) $userId,
+            'referrer_name' => $data['referrer_name'],
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'cellphone' => $data['cellphone'] ?? null,
