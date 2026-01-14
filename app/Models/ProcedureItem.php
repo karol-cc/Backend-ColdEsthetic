@@ -13,6 +13,11 @@ class ProcedureItem extends Model
         'procedure_id',
         'item_name',
         'price',
+        'meta',
+    ];
+
+    protected $casts = [
+        'meta' => 'array',
     ];
 
     public function procedure()

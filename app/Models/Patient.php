@@ -19,6 +19,7 @@ class Patient extends Model
         'height',
         'bmi',
         'medical_background',
+        'biological_sex',
     ];
 
     // 🔗 Relaciones
