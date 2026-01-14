@@ -1,77 +1,154 @@
-<p align="center">
-  <a href="https://laravel.com" target="_blank">
-    <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="300" alt="Laravel Logo">
-  </a>
-</p>
+Cold Esthetic – Backend API
 
-# Cold Esthetic – Backend API.
+Backend API desarrollado en Laravel 12 para la gestión de datos clínicos, administrativos y de contenido de la clínica estética Cold Esthetic.
 
-Backend API desarrollado en **Laravel 12** para la gestión de datos y contenidos de la clínica estética **Cold Esthetic**.  
-El sistema permite administrar información visual (imágenes tipo _Before & After_) y datos de formularios de contacto, asegurando un manejo correcto del almacenamiento, seguridad y consistencia de los registros.
+El sistema centraliza el registro de pacientes, valoraciones clínicas, procedimientos con precios personalizados, así como la administración de contenidos visuales (Before & After) y leads de contacto.
 
----
+📌 Descripción del proyecto
 
-## 📌 Descripción del proyecto
+Este backend proporciona una API REST que permite administrar:
 
-Este backend proporciona una **API REST** que centraliza la administración de:
+Registro y gestión de pacientes.
 
--   Contenidos visuales de la clínica (Before & After).
--   Formularios de contacto donde los usuarios ingresan sus datos personales, seleccionan un servicio de interés y envían mensajes opcionales.
--   Registro y análisis de leads para estadísticas y seguimiento comercial.
+Registro de valoraciones clínicas realizadas por usuarios del sistema (remitentes).
 
-El sistema está orientado a un uso administrativo y público controlado, integrándose fácilmente con aplicaciones frontend web o móviles.
+Selección de procedimientos por valoración, con precios definidos durante la evaluación.
 
----
+Cálculo automático de totales por valoración.
 
-## 🛠 Tecnologías utilizadas
+Registro de antecedentes y notas clínicas.
 
--   PHP 8+
--   Laravel Framework 12
--   Laravel Eloquent ORM
--   MySQL
--   API REST
--   Laravel Sanctum (autenticación)
--   Laravel Storage (gestión de archivos)
--   UUID
--   Faker (generación de datos de prueba con factories y seeders)
+Administración de contenidos visuales (Before & After).
 
----
+Formularios de contacto para captura y análisis de leads.
 
-## ⚙️ Funcionalidades principales
+Estadísticas y seguimiento comercial.
 
--   Autenticación de administrador.
--   Gestión de contenidos visuales (CRUD de imágenes Before/After).
--   Subida y almacenamiento seguro de imágenes.
--   Manejo de formularios de contacto:
-    -   Registro de nombre, teléfono, correo electrónico, servicio de interés y mensaje.
-    -   Validación de datos y respuestas JSON.
-    -   Almacenamiento para análisis y estadísticas.
--   Estadísticas de servicios más solicitados.
--   Actualización parcial de registros.
--   Eliminación automática de archivos asociados.
--   Exposición pública de contenidos visuales.
+El sistema está orientado a un uso administrativo, con exposición pública controlada de ciertos contenidos, e integración con aplicaciones frontend web o móviles.
 
----
+🧠 Modelo funcional (resumen)
 
-## 📁 Almacenamiento de imágenes
+Un paciente puede tener múltiples valoraciones.
+
+Cada valoración:
+
+Es realizada por un usuario autenticado (remitente).
+
+Contiene datos clínicos correspondientes a ese momento.
+
+Incluye uno o más procedimientos seleccionados.
+
+Cada procedimiento:
+
+Se activa mediante selección explícita.
+
+Tiene un precio personalizado.
+
+Puede incluir datos adicionales según el tipo (ej. pierna, faja).
+
+El total de la valoración se calcula a partir de los procedimientos registrados.
+
+La información queda almacenada como un registro histórico de la sesión.
+
+🧱 Procedimientos y precios
+
+El sistema no maneja precios fijos ni catálogos cerrados.
+
+Solo se guardan los procedimientos seleccionados.
+
+Cada procedimiento tiene un precio obligatorio cuando está activo.
+
+Los datos adicionales se almacenan como metadata cuando aplica.
+
+El total se obtiene sumando los precios de los procedimientos asociados a la valoración.
+
+🏷️ Manejo de marca (brand_slug)
+
+El sistema está preparado para operar bajo una marca definida por backend.
+
+Cada backend está asociado a una sola marca.
+
+El brand_slug:
+
+Se define en el archivo de configuración.
+
+No se recibe desde el frontend.
+
+Se asigna automáticamente a los registros creados.
+
+Esto garantiza consistencia y evita manipulación de datos.
+
+🛠 Tecnologías utilizadas
+
+PHP 8+
+
+Laravel Framework 12
+
+Laravel Eloquent ORM
+
+MySQL
+
+API REST
+
+Laravel Sanctum (autenticación)
+
+Laravel Storage (gestión de archivos)
+
+UUID
+
+Faker (factories y seeders)
+
+⚙️ Funcionalidades principales
+
+Autenticación de usuarios administrativos.
+
+Gestión de pacientes.
+
+Registro de valoraciones clínicas.
+
+Selección de procedimientos con precios personalizados.
+
+Cálculo automático de totales.
+
+Registro de antecedentes y notas clínicas.
+
+Gestión de contenidos visuales (CRUD de imágenes Before & After).
+
+Subida y almacenamiento seguro de imágenes.
+
+Manejo de formularios de contacto:
+
+Registro de nombre, teléfono, correo, servicio de interés y mensaje.
+
+Validación de datos.
+
+Almacenamiento para análisis y estadísticas.
+
+Estadísticas de servicios más solicitados.
+
+Actualización parcial de registros.
+
+Eliminación automática de archivos asociados.
+
+Exposición pública controlada de contenidos visuales.
+
+📁 Almacenamiento de imágenes
 
 Las imágenes se almacenan en:
+
 storage/app/public
 
+
 Y se exponen mediante el enlace simbólico:
+
 /public/storage
+
 
 Es obligatorio ejecutar:
 
-```bash
 php artisan storage:link
-```
 
----
-
-## 🚀 Instalación y configuración
-
-```bash
+🚀 Instalación y configuración
 git clone https://github.com/karool-cc/perfectesthetic-backend.git
 cd perfectesthetic-backend
 composer install
@@ -79,21 +156,24 @@ cp .env.example .env
 php artisan key:generate
 php artisan migrate
 php artisan serve
-```
+
 
 Configurar las variables de entorno en el archivo .env según el entorno de ejecución.
 
----
+🔒 Seguridad
 
-## 🔒 Seguridad
+Autenticación mediante Laravel Sanctum.
 
--   Autenticación mediante Laravel Sanctum
--   Rutas protegidas para acciones administrativas
--   Rutas públicas para visualización de contenidos
+Rutas protegidas para acciones administrativas.
 
----
+Rutas públicas para visualización de contenidos permitidos.
 
-## 👩‍💻 Autoras
+Validación de datos en backend.
 
--   Ximena Baquero
--   Karol Cheverria
+👩‍💻 Autoras
+
+Ximena Baquero
+
+Karol Cheverria
+
+
