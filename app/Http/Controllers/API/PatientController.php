@@ -5,9 +5,32 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePatientRequest;
 use App\Models\Patient;
+use Illuminate\Http\Request;
 
 class PatientController extends Controller
 {
+    public function index(Request $request)
+    {
+        $query = Patient::query();
+
+        if ($request->filled('search')) {
+            $search = trim((string) $request->query('search'));
+            $query->where(function ($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('cellphone', 'like', "%{$search}%");
+            });
+        }
+
+        return response()->json($query->orderByDesc('id')->get());
+    }
+
+    public function show(Patient $patient)
+    {
+        $patient->load(['procedures.items', 'medicalEvaluations', 'user']);
+        return response()->json($patient);
+    }
+
     public function store(StorePatientRequest $request)
     {
         $data = $request->validated();
