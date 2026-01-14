@@ -1,154 +1,157 @@
-Cold Esthetic – Backend API
+# Cold Esthetic – Backend API
 
-Backend API desarrollado en Laravel 12 para la gestión de datos clínicos, administrativos y de contenido de la clínica estética Cold Esthetic.
+Backend API desarrollada en **Laravel 12** para la gestión de datos clínicos, administrativos y de contenido de la clínica estética **Cold Esthetic**.
 
-El sistema centraliza el registro de pacientes, valoraciones clínicas, procedimientos con precios personalizados, así como la administración de contenidos visuales (Before & After) y leads de contacto.
+El sistema centraliza:
 
-📌 Descripción del proyecto
+- Registro de pacientes
+- Valoraciones clínicas
+- Procedimientos con precios personalizados
+- Contenido visual (Before & After)
+- Leads de contacto
 
-Este backend proporciona una API REST que permite administrar:
+## Contenido
 
-Registro y gestión de pacientes.
+- [Descripción](#descripción)
+- [Modelo funcional](#modelo-funcional)
+- [Modelo de datos (ERD)](#modelo-de-datos-erd)
+- [Tecnologías](#tecnologías)
+- [Funcionalidades](#funcionalidades)
+- [Almacenamiento de imágenes](#almacenamiento-de-imágenes)
+- [Instalación](#instalación)
+- [Seguridad](#seguridad)
+- [Autoras](#autoras)
 
-Registro de valoraciones clínicas realizadas por usuarios del sistema (remitentes).
+## Descripción
 
-Selección de procedimientos por valoración, con precios definidos durante la evaluación.
+Este backend expone una **API REST** orientada a uso administrativo, con exposición pública controlada de ciertos contenidos y fácil integración con aplicaciones web o móviles.
 
-Cálculo automático de totales por valoración.
+Permite administrar:
 
-Registro de antecedentes y notas clínicas.
+- Registro y gestión de pacientes.
+- Registro de valoraciones clínicas realizadas por usuarios del sistema (remitentes).
+- Selección de procedimientos por valoración, con precios definidos durante la evaluación.
+- Cálculo automático de totales por valoración.
+- Registro de antecedentes y notas clínicas.
+- Administración de contenidos visuales (Before & After).
+- Formularios de contacto para captura y análisis de leads.
+- Estadísticas y seguimiento comercial.
 
-Administración de contenidos visuales (Before & After).
+## Modelo funcional
 
-Formularios de contacto para captura y análisis de leads.
+- Un paciente puede tener múltiples valoraciones.
+- Cada valoración:
+	- Es realizada por un usuario autenticado (remitente).
+	- Contiene datos clínicos correspondientes a ese momento.
+	- Incluye uno o más procedimientos seleccionados.
+- Cada procedimiento:
+	- Se activa mediante selección explícita.
+	- Tiene un precio personalizado.
+	- Puede incluir datos adicionales según el tipo (ej. pierna, faja).
+- El total de la valoración se calcula sumando los precios de los procedimientos asociados.
+- La información queda almacenada como un registro histórico de la sesión.
 
-Estadísticas y seguimiento comercial.
+### Procedimientos y precios
 
-El sistema está orientado a un uso administrativo, con exposición pública controlada de ciertos contenidos, e integración con aplicaciones frontend web o móviles.
+- El sistema no maneja precios fijos ni catálogos cerrados.
+- Solo se guardan los procedimientos seleccionados.
+- Cada procedimiento tiene un precio obligatorio cuando está activo.
+- Los datos adicionales se almacenan como metadata cuando aplica.
 
-🧠 Modelo funcional (resumen)
+### Manejo de marca (brand_slug)
 
-Un paciente puede tener múltiples valoraciones.
+- Cada backend está asociado a **una sola marca**.
+- `brand_slug`:
+	- Se define en el archivo de configuración.
+	- No se recibe desde el frontend.
+	- Se asigna automáticamente a los registros creados.
 
-Cada valoración:
+## Modelo de datos (ERD)
 
-Es realizada por un usuario autenticado (remitente).
+Recomendación para que el diagrama se vea directo en GitHub:
 
-Contiene datos clínicos correspondientes a ese momento.
+1) Versiona el archivo fuente `.drawio`.
+2) Exporta el diagrama a **PNG o SVG** y súbelo también.
 
-Incluye uno o más procedimientos seleccionados.
+Ejemplo de estructura recomendada:
 
-Cada procedimiento:
+```
+docs/
+	diagrams/
+		database-erd.drawio
+		database-erd.png
+```
 
-Se activa mediante selección explícita.
+Cuando tengas el export, lo puedes mostrar así:
 
-Tiene un precio personalizado.
+![Modelo de datos (ERD)](docs/diagrams/database-erd.png)
 
-Puede incluir datos adicionales según el tipo (ej. pierna, faja).
+Y dejar el fuente para editar:
 
-El total de la valoración se calcula a partir de los procedimientos registrados.
+- Fuente (draw.io): docs/diagrams/database-erd.drawio
 
-La información queda almacenada como un registro histórico de la sesión.
+### ¿Cómo agregar un draw.io al repo?
 
-🧱 Procedimientos y precios
+Opción A (recomendada): **diagrams.net + export**
 
-El sistema no maneja precios fijos ni catálogos cerrados.
-
-Solo se guardan los procedimientos seleccionados.
-
-Cada procedimiento tiene un precio obligatorio cuando está activo.
-
-Los datos adicionales se almacenan como metadata cuando aplica.
-
-El total se obtiene sumando los precios de los procedimientos asociados a la valoración.
-
-🏷️ Manejo de marca (brand_slug)
-
-El sistema está preparado para operar bajo una marca definida por backend.
-
-Cada backend está asociado a una sola marca.
-
-El brand_slug:
-
-Se define en el archivo de configuración.
-
-No se recibe desde el frontend.
-
-Se asigna automáticamente a los registros creados.
-
-Esto garantiza consistencia y evita manipulación de datos.
-
-🛠 Tecnologías utilizadas
-
-PHP 8+
-
-Laravel Framework 12
-
-Laravel Eloquent ORM
-
-MySQL
-
-API REST
-
-Laravel Sanctum (autenticación)
-
-Laravel Storage (gestión de archivos)
-
-UUID
-
-Faker (factories y seeders)
-
-⚙️ Funcionalidades principales
-
-Autenticación de usuarios administrativos.
-
-Gestión de pacientes.
-
-Registro de valoraciones clínicas.
-
-Selección de procedimientos con precios personalizados.
-
-Cálculo automático de totales.
-
-Registro de antecedentes y notas clínicas.
-
-Gestión de contenidos visuales (CRUD de imágenes Before & After).
-
-Subida y almacenamiento seguro de imágenes.
-
-Manejo de formularios de contacto:
-
-Registro de nombre, teléfono, correo, servicio de interés y mensaje.
-
-Validación de datos.
-
-Almacenamiento para análisis y estadísticas.
-
-Estadísticas de servicios más solicitados.
-
-Actualización parcial de registros.
-
-Eliminación automática de archivos asociados.
-
-Exposición pública controlada de contenidos visuales.
-
-📁 Almacenamiento de imágenes
+1. Crea/edita tu diagrama en https://app.diagrams.net/
+2. Guarda el archivo como: `docs/diagrams/database-erd.drawio`
+3. Exporta a PNG o SVG:
+	 - **File → Export as → PNG** (o SVG)
+	 - Guarda como: `docs/diagrams/database-erd.png`
+4. Sube ambos archivos al repo.
+
+Opción B: **editar en VS Code**
+
+- Instala la extensión “Draw.io Integration” (ID: `hediet.vscode-drawio`).
+- Abre el archivo `.drawio` desde VS Code, edita y exporta PNG/SVG para el README.
+
+## Tecnologías
+
+- PHP 8+
+- Laravel Framework 12
+- Laravel Eloquent ORM
+- MySQL
+- API REST
+- Laravel Sanctum (autenticación)
+- Laravel Storage (gestión de archivos)
+- UUID
+- Faker (factories y seeders)
+
+## Funcionalidades
+
+- Autenticación de usuarios administrativos.
+- Gestión de pacientes.
+- Registro de valoraciones clínicas.
+- Selección de procedimientos con precios personalizados.
+- Cálculo automático de totales.
+- Registro de antecedentes y notas clínicas.
+- Gestión de contenidos visuales (CRUD de imágenes Before & After).
+- Subida y almacenamiento seguro de imágenes.
+- Manejo de formularios de contacto (leads): validación, almacenamiento y estadísticas.
+- Actualización parcial de registros.
+- Eliminación automática de archivos asociados.
+- Exposición pública controlada de contenidos.
+
+## Almacenamiento de imágenes
 
 Las imágenes se almacenan en:
 
-storage/app/public
-
+`storage/app/public`
 
 Y se exponen mediante el enlace simbólico:
 
-/public/storage
-
+`/public/storage`
 
 Es obligatorio ejecutar:
 
+```bash
 php artisan storage:link
+```
 
-🚀 Instalación y configuración
+## Instalación
+
+```bash
 git clone https://github.com/karool-cc/perfectesthetic-backend.git
 cd perfectesthetic-backend
 composer install
@@ -156,24 +159,20 @@ cp .env.example .env
 php artisan key:generate
 php artisan migrate
 php artisan serve
+```
 
+Configura las variables de entorno en `.env` según tu entorno.
 
-Configurar las variables de entorno en el archivo .env según el entorno de ejecución.
+## Seguridad
 
-🔒 Seguridad
+- Autenticación mediante Laravel Sanctum.
+- Rutas protegidas para acciones administrativas.
+- Rutas públicas para visualización de contenidos permitidos.
+- Validación de datos en backend.
 
-Autenticación mediante Laravel Sanctum.
+## Autoras
 
-Rutas protegidas para acciones administrativas.
-
-Rutas públicas para visualización de contenidos permitidos.
-
-Validación de datos en backend.
-
-👩‍💻 Autoras
-
-Ximena Baquero
-
-Karol Cheverria
+- Ximena Baquero
+- Karol Cheverria
 
 

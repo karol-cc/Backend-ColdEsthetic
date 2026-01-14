@@ -1,0 +1,146 @@
+---
+title: Database ERD
+---
+erDiagram
+    direction LR
+    PATIENTS ||--o{ MEDICAL_EVALUATIONS : "patient_id"
+    PATIENTS ||--o{ PROCEDURES : "patient_id"
+    PROCEDURES ||--o{ PROCEDURE_ITEMS : "procedure_id"
+    USERS ||--o{ CLINICAL_IMAGES : "user_id"
+    USERS ||--o{ MEDICAL_EVALUATIONS : "user_id"
+    USERS ||--o{ PATIENTS : "user_id"
+    USERS ||--o{ PROCEDURES : "user_id"
+
+    CACHE {
+        int expiration
+        string key
+    }
+
+    CACHE_LOCKS {
+        int expiration
+        string key
+        string owner
+    }
+
+    CLINICAL_IMAGES {
+        bigint id PK
+        string after_image
+        string before_image
+        datetime created_at
+        text description
+        string title
+        datetime updated_at
+        bigint user_id FK
+    }
+
+    FAILED_JOBS {
+        bigint id PK
+        text connection
+        text exception
+        datetime failed_at
+        text payload
+        text queue
+        string uuid
+    }
+
+    JOB_BATCHES {
+        string id
+        int cancelled_at
+        int created_at
+        text failed_job_ids
+        int failed_jobs
+        int finished_at
+        string name
+        int pending_jobs
+        int total_jobs
+    }
+
+    JOBS {
+        bigint id PK
+        text payload
+        string queue
+    }
+
+    MEDICAL_EVALUATIONS {
+        bigint id PK
+        datetime created_at
+        json evaluation_data
+        text notes
+        bigint patient_id FK
+        datetime updated_at
+        bigint user_id FK
+    }
+
+    PASSWORD_RESET_TOKENS {
+        datetime created_at
+        string email
+        string token
+    }
+
+    PATIENTS {
+        bigint id PK
+        int age
+        float bmi
+        string cellphone
+        datetime created_at
+        string first_name
+        float height
+        string last_name
+        text medical_background
+        datetime updated_at
+        bigint user_id FK
+        float weight
+    }
+
+    PERSONAL_ACCESS_TOKENS {
+        bigint id PK
+        text abilities
+        datetime created_at
+        datetime expires_at
+        datetime last_used_at
+        text name
+        string token
+        datetime updated_at
+    }
+
+    PROCEDURE_ITEMS {
+        bigint id PK
+        datetime created_at
+        string item_name
+        decimal price
+        bigint procedure_id FK
+        datetime updated_at
+    }
+
+    PROCEDURES {
+        bigint id PK
+        datetime created_at
+        bigint patient_id FK
+        date procedure_date
+        decimal total_amount
+        datetime updated_at
+        bigint user_id FK
+    }
+
+    SESSIONS {
+        string id
+        string ip_address
+        int last_activity
+        text payload
+        text user_agent
+    }
+
+    USERS {
+        bigint id PK
+        string brand_name
+        string brand_slug
+        string cellphone
+        datetime created_at
+        string email
+        datetime email_verified_at
+        string first_name
+        string last_name
+        string name
+        string password
+        datetime updated_at
+    }
