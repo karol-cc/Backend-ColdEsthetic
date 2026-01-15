@@ -1,28 +1,32 @@
 ---
 title: Database ERD
+config:
+    layout: elk
 ---
 erDiagram
     direction LR
-    PATIENTS ||--o{ MEDICAL_EVALUATIONS : "patient_id"
-    PATIENTS ||--o{ PROCEDURES : "patient_id"
-    PROCEDURES ||--o{ PROCEDURE_ITEMS : "procedure_id"
-    USERS ||--o{ CLINICAL_IMAGES : "user_id"
-    USERS ||--o{ MEDICAL_EVALUATIONS : "user_id"
-    USERS ||--o{ PATIENTS : "user_id"
-    USERS ||--o{ PROCEDURES : "user_id"
+        USERS ||--o{ PATIENTS : creates
+        USERS ||--o{ PROCEDURES : creates
+        USERS ||--o{ MEDICAL_EVALUATIONS : writes
+        USERS ||--o{ CLINICAL_IMAGES : uploads
 
-    CACHE {
+        PATIENTS ||--o{ PROCEDURES : has
+        PATIENTS ||--o{ MEDICAL_EVALUATIONS : has
+        PROCEDURES ||--o{ PROCEDURE_ITEMS : includes
+        PROCEDURES ||--o| MEDICAL_EVALUATIONS : has
+
+    CACHE[Cache] {
         int expiration
         string key
     }
 
-    CACHE_LOCKS {
+    CACHE_LOCKS[CacheLock] {
         int expiration
         string key
         string owner
     }
 
-    CLINICAL_IMAGES {
+    CLINICAL_IMAGES[ClinicalImage] {
         bigint id PK
         string after_image
         string before_image
@@ -33,7 +37,7 @@ erDiagram
         bigint user_id FK
     }
 
-    FAILED_JOBS {
+    FAILED_JOBS[FailedJob] {
         bigint id PK
         text connection
         text exception
@@ -43,7 +47,7 @@ erDiagram
         string uuid
     }
 
-    JOB_BATCHES {
+    JOB_BATCHES[JobBatch] {
         string id
         int cancelled_at
         int created_at
@@ -55,29 +59,30 @@ erDiagram
         int total_jobs
     }
 
-    JOBS {
+    JOBS[Job] {
         bigint id PK
         text payload
         string queue
     }
 
-    MEDICAL_EVALUATIONS {
+    MEDICAL_EVALUATIONS[MedicalEvaluation] {
         bigint id PK
+        bigint procedure_id FK
         datetime created_at
-        json evaluation_data
+        text evaluation_data "JSON serializado (LONGTEXT en MySQL)"
         text notes
         bigint patient_id FK
         datetime updated_at
         bigint user_id FK
     }
 
-    PASSWORD_RESET_TOKENS {
+    PASSWORD_RESET_TOKENS[PasswordResetToken] {
         datetime created_at
         string email
         string token
     }
 
-    PATIENTS {
+    PATIENTS[Patient] {
         bigint id PK
         int age
         float bmi
@@ -86,13 +91,15 @@ erDiagram
         string first_name
         float height
         string last_name
+        string referrer_name "Remitente (texto libre)"
         text medical_background
+        string biological_sex
         datetime updated_at
         bigint user_id FK
         float weight
     }
 
-    PERSONAL_ACCESS_TOKENS {
+    PERSONAL_ACCESS_TOKENS[PersonalAccessToken] {
         bigint id PK
         text abilities
         datetime created_at
@@ -103,26 +110,29 @@ erDiagram
         datetime updated_at
     }
 
-    PROCEDURE_ITEMS {
+    PROCEDURE_ITEMS[ProcedureItem] {
         bigint id PK
         datetime created_at
         string item_name
         decimal price
+        json meta
         bigint procedure_id FK
         datetime updated_at
     }
 
-    PROCEDURES {
+    PROCEDURES[Procedure] {
         bigint id PK
         datetime created_at
         bigint patient_id FK
+        string brand_slug
         date procedure_date
+        text notes
         decimal total_amount
         datetime updated_at
         bigint user_id FK
     }
 
-    SESSIONS {
+    SESSIONS[Session] {
         string id
         string ip_address
         int last_activity
@@ -130,7 +140,7 @@ erDiagram
         text user_agent
     }
 
-    USERS {
+    USERS[User] {
         bigint id PK
         string brand_name
         string brand_slug
@@ -144,3 +154,9 @@ erDiagram
         string password
         datetime updated_at
     }
+
+    %% Visual: separa tablas de negocio vs infraestructura Laravel
+    classDef domain fill:#E6FFFA,stroke:#2C7A7B,stroke-width:2px
+    classDef infra fill:#F7FAFC,stroke:#718096,stroke-dasharray: 3 3
+    class USERS,PATIENTS,PROCEDURES,PROCEDURE_ITEMS,MEDICAL_EVALUATIONS,CLINICAL_IMAGES domain
+    class CACHE,CACHE_LOCKS,FAILED_JOBS,JOB_BATCHES,JOBS,PASSWORD_RESET_TOKENS,PERSONAL_ACCESS_TOKENS,SESSIONS infra
