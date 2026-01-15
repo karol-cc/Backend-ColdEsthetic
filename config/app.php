@@ -3,8 +3,8 @@
 return [
 
     //------------------------------------
-    'brand_name' => env('BRAND_NAME'),
-    'brand_slug' => env('BRAND_SLUG'),
+    'brand_name' => env('BRAND_NAME', 'Coldesthetic'),
+    'brand_slug' => env('BRAND_SLUG', 'coldesthetic'),
     //------------------------------------
 
     
