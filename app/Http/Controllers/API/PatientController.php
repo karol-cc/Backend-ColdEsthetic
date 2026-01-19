@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 
 class PatientController extends Controller
 {
+    //Listar pacientes
     public function index(Request $request)
     {
         $query = Patient::query();
@@ -25,12 +26,15 @@ class PatientController extends Controller
         return response()->json($query->orderByDesc('id')->get());
     }
 
+
     public function show(Patient $patient)
     {
         $patient->load(['procedures.items', 'medicalEvaluations', 'user']);
         return response()->json($patient);
     }
 
+
+    //crear
     public function store(StorePatientRequest $request)
     {
         $data = $request->validated();

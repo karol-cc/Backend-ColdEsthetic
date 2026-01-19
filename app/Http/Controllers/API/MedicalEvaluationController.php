@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class MedicalEvaluationController extends Controller
 {
+    //Crear
     public function store(StoreMedicalEvaluationRequest $request)
     {
         $data = $request->validated();
@@ -40,6 +41,7 @@ class MedicalEvaluationController extends Controller
         ], 201);
     }
 
+    //Actualizar
     public function update(UpdateMedicalEvaluationRequest $request, MedicalEvaluation $medicalEvaluation)
     {
         $data = $request->validated();

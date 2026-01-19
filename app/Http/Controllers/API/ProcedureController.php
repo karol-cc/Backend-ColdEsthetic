@@ -69,6 +69,7 @@ class ProcedureController extends Controller
         ], 201);
     }
 
+
     public function update(UpdateProcedureRequest $request, Procedure $procedure)
     {
         $data = $request->validated();
