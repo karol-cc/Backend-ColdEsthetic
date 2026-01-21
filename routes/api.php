@@ -60,15 +60,16 @@ use App\Http\Controllers\API\StatsController;
             Route::get('/patients/{patient}', [PatientController::class, 'show']);
             Route::post('/patients', [PatientController::class, 'store']);
 
+            // Valoraciones
+            Route::get('/medical-evaluation/patient/{patient}',[MedicalEvaluationController::class, 'showByPatient']);
+            Route::post('/medical-evaluations', [MedicalEvaluationController::class, 'store']);
+            Route::put('/medical-evaluations/{medicalEvaluation}', [MedicalEvaluationController::class, 'update']);
+
             // Procedimientos
             Route::get('/procedures', [ProcedureController::class, 'index']);
             Route::get('/procedures/{procedure}', [ProcedureController::class, 'show']);
             Route::post('/procedures', [ProcedureController::class, 'store']);
             Route::put('/procedures/{procedure}', [ProcedureController::class, 'update']);
-
-            // Valoraciones
-            Route::post('/medical-evaluations', [MedicalEvaluationController::class, 'store']);
-            Route::put('/medical-evaluations/{medicalEvaluation}', [MedicalEvaluationController::class, 'update']);
 
             Route::prefix('stats')->group(function () {
             // Estadisticas

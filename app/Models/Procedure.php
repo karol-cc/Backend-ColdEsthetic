@@ -10,32 +10,22 @@ class Procedure extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'patient_id',
+        'medical_evaluation_id',
         'brand_slug',
-        'total_amount',
         'procedure_date',
+        'total_amount',
         'notes',
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    /* Relaciones */
 
-    public function patient()
+    public function medicalEvaluation()
     {
-        return $this->belongsTo(Patient::class);
+        return $this->belongsTo(MedicalEvaluation::class);
     }
 
     public function items()
     {
         return $this->hasMany(ProcedureItem::class);
     }
-
-    public function medicalEvaluation()
-    {
-        return $this->hasOne(MedicalEvaluation::class);
-    }
 }
-

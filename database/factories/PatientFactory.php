@@ -23,11 +23,7 @@ class PatientFactory extends Factory
             'last_name' => $this->faker->lastName(),
             'cellphone' => $this->faker->phoneNumber(),
             'age' => $this->faker->numberBetween(18, 65),
-            'weight' => $this->faker->randomFloat(1, 50, 100),
-            'height' => $this->faker->randomFloat(2, 1.5, 1.9),
-            'bmi' => null,
             'biological_sex' => $this->faker->randomElement(['Female', 'Male', 'Other']),
-            'medical_background' => $this->faker->optional()->sentence(),
         ];
     }
 }

@@ -14,10 +14,19 @@ class StoreProcedureRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'patient_id' => ['required', 'integer', 'exists:patients,id'],
+            // Relación correcta
+            'medical_evaluation_id' => [
+                'required',
+                'integer',
+                'exists:medical_evaluations,id',
+                'unique:procedures,medical_evaluation_id'
+            ],
+
+            // Datos del procedimiento
             'procedure_date' => ['required', 'date'],
             'notes' => ['nullable', 'string'],
 
+            // Items / tratamientos
             'items' => ['required', 'array', 'min:1'],
             'items.*.item_name' => ['required', 'string', 'max:255'],
             'items.*.price' => ['required', 'numeric', 'min:0'],

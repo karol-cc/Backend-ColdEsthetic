@@ -14,12 +14,15 @@ class StoreMedicalEvaluationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'procedure_id' => ['required', 'integer', 'exists:procedures,id', 'unique:medical_evaluations,procedure_id'],
+            // Relación obligatoria
             'patient_id' => ['required', 'integer', 'exists:patients,id'],
 
-            // We store this as JSON (text column) but accept array for flexibility
-            'evaluation_data' => ['required', 'array'],
-            'notes' => ['nullable', 'string'],
+            // Datos clínicos
+            'weight' => ['required', 'numeric', 'min:1'],
+            'height' => ['required', 'numeric', 'gt:0'],
+
+            // Antecedentes médicos
+            'medical_background' => ['nullable', 'string'],
         ];
     }
 }

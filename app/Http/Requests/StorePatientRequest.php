@@ -42,12 +42,6 @@ class StorePatientRequest extends FormRequest
             'last_name' => ['required', 'string', 'max:255'],
             'cellphone' => ['nullable', 'string', 'max:50'],
             'age' => ['required', 'integer', 'min:0', 'max:150'],
-
-            // Medidas (se usa para calcular BMI en backend)
-            'weight' => ['required', 'numeric', 'min:0'],
-            'height' => ['required', 'numeric', 'gt:0'],
-
-            'medical_background' => ['nullable', 'string'],
             'biological_sex' => ['required', 'string', 'in:Female,Male,Other'],
         ];
     }

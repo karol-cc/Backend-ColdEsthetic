@@ -18,21 +18,25 @@ class StatsController extends Controller
     {
         return response()->json([
             'total_patients' => Patient::count(),
-            'total_income'   => Procedure::sum('total_amount'),
-            'total_procedures' => Procedure::count(),
+            'total_sessions' => Procedure::count(),
+            'total_procedures' => ProcedureItem::count(),
+            'total_income' => Procedure::sum('total_amount'),
             'this_month_income' => Procedure::whereMonth('procedure_date', now()->month)
                 ->whereYear('procedure_date', now()->year)
                 ->sum('total_amount'),
         ]);
     }
 
-    // Pacientes por remitente
+    /**
+     * Pacientes por remitente
+     */
     public function patientsByReferrer()
     {
         $data = Patient::select(
                 'referrer_name',
                 DB::raw('COUNT(*) as total_patients')
             )
+            ->whereNotNull('referrer_name')
             ->groupBy('referrer_name')
             ->orderByDesc('total_patients')
             ->get();
@@ -40,14 +44,20 @@ class StatsController extends Controller
         return response()->json($data);
     }
 
-    // Ingresos por remitente
+    /**
+     * Ingresos por remitente
+     * (Procedure → MedicalEvaluation → Patient)
+     */
     public function incomeByReferrer()
     {
-        $data = Procedure::join('patients', 'procedures.patient_id', '=', 'patients.id')
+        $data = DB::table('procedures')
+            ->join('medical_evaluations', 'procedures.medical_evaluation_id', '=', 'medical_evaluations.id')
+            ->join('patients', 'medical_evaluations.patient_id', '=', 'patients.id')
             ->select(
                 'patients.referrer_name',
                 DB::raw('SUM(procedures.total_amount) as total_income')
             )
+            ->whereNotNull('patients.referrer_name')
             ->groupBy('patients.referrer_name')
             ->orderByDesc('total_income')
             ->get();
@@ -55,7 +65,9 @@ class StatsController extends Controller
         return response()->json($data);
     }
 
-    // Ingresos mensuales
+    /**
+     * Ingresos mensuales
+     */
     public function incomeMonthly()
     {
         $data = Procedure::select(
@@ -71,7 +83,9 @@ class StatsController extends Controller
         return response()->json($data);
     }
 
-    // Ingresos semanales (por día)
+    /**
+     * Ingresos semanales (por día)
+     */
     public function incomeWeekly()
     {
         $start = Carbon::now()->startOfWeek();
@@ -89,7 +103,9 @@ class StatsController extends Controller
         return response()->json($data);
     }
 
-    // Procedimientos más realizados
+    /**
+     * Procedimientos más realizados
+     */
     public function mostRequestedProcedures()
     {
         $data = ProcedureItem::select(
@@ -105,7 +121,9 @@ class StatsController extends Controller
         return response()->json($data);
     }
 
-    // Ingresos por tipo de procedimiento
+    /**
+     * Ingresos por tipo de procedimiento
+     */
     public function incomeByProcedureType()
     {
         $data = ProcedureItem::select(

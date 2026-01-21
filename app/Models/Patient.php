@@ -16,22 +16,14 @@ class Patient extends Model
         'last_name',
         'cellphone',
         'age',
-        'weight',
-        'height',
-        'bmi',
-        'medical_background',
         'biological_sex',
     ];
 
-    // 🔗 Relaciones
+    /* Relaciones */
+
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function procedures()
-    {
-        return $this->hasMany(Procedure::class);
     }
 
     public function medicalEvaluations()

@@ -10,16 +10,16 @@ class MedicalEvaluation extends Model
     use HasFactory;
 
     protected $fillable = [
-        'procedure_id',
         'user_id',
         'patient_id',
-        'evaluation_data',
-        'notes',
+        'medical_background',
+        'weight',
+        'height',
+        'bmi',
+        'bmi_status',
     ];
 
-    protected $casts = [
-        'evaluation_data' => 'array', 
-    ];
+    /* Relaciones */
 
     public function user()
     {
@@ -31,8 +31,8 @@ class MedicalEvaluation extends Model
         return $this->belongsTo(Patient::class);
     }
 
-    public function procedure()
+    public function procedures()
     {
-        return $this->belongsTo(Procedure::class);
+        return $this->hasMany(Procedure::class);
     }
 }
