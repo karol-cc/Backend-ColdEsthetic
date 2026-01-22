@@ -15,8 +15,8 @@ class PatientFactory extends Factory
         return [
             'user_id' => User::inRandomOrder()->first()?->id,
             'referrer_name' => $this->faker->randomElement([
-                'Dr. Adele',
-                'Dr. Fernanda',
+                'Dra. Adele',
+                'Dra. Fernanda',
                 'Dr. Alexander'
             ]),
             'first_name' => $this->faker->firstName(),

@@ -23,9 +23,7 @@ class MedicalEvaluationFactory extends Factory
             'weight' => $this->faker->numberBetween(50, 90),
             'height' => $this->faker->numberBetween(150, 180),
 
-            // estos los setea el controller
-            'bmi' => null,
-            'bmi_status' => null,
+        
         ];
     }
 }
