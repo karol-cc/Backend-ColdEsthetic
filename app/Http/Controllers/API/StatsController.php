@@ -14,16 +14,84 @@ class StatsController extends Controller
     /**
      * KPIs generales
      */
-    public function summary()
+        public function summary()
     {
+        $now = Carbon::now();
+
+        // Mes actual
+        $thisMonthIncome = Procedure::whereMonth('procedure_date', $now->month)
+            ->whereYear('procedure_date', $now->year)
+            ->sum('total_amount');
+
+        $thisMonthPatients = Patient::whereMonth('created_at', $now->month)
+            ->whereYear('created_at', $now->year)
+            ->count();
+
+        $thisMonthSessions = Procedure::whereMonth('procedure_date', $now->month)
+            ->whereYear('procedure_date', $now->year)
+            ->count();
+
+        $thisMonthProcedures = ProcedureItem::whereMonth('created_at', $now->month)
+            ->whereYear('created_at', $now->year)
+            ->count();
+
+        // Mes anterior
+        $lastMonth = $now->copy()->subMonth();
+
+        $lastMonthIncome = Procedure::whereMonth('procedure_date', $lastMonth->month)
+            ->whereYear('procedure_date', $lastMonth->year)
+            ->sum('total_amount');
+
+        $lastMonthPatients = Patient::whereMonth('created_at', $lastMonth->month)
+            ->whereYear('created_at', $lastMonth->year)
+            ->count();
+
+        $lastMonthSessions = Procedure::whereMonth('procedure_date', $lastMonth->month)
+            ->whereYear('procedure_date', $lastMonth->year)
+            ->count();
+
+        $lastMonthProcedures = ProcedureItem::whereMonth('created_at', $lastMonth->month)
+            ->whereYear('created_at', $lastMonth->year)
+            ->count();
+
+        // Variaciones porcentuales
+        $incomeVariation = $lastMonthIncome > 0
+            ? round((($thisMonthIncome - $lastMonthIncome) / $lastMonthIncome) * 100, 2)
+            : null;
+
+        $patientsVariation = $lastMonthPatients > 0
+            ? round((($thisMonthPatients - $lastMonthPatients) / $lastMonthPatients) * 100, 2)
+            : null;
+
+        $sessionsVariation = $lastMonthSessions > 0
+            ? round((($thisMonthSessions - $lastMonthSessions) / $lastMonthSessions) * 100, 2)
+            : null;
+
+        $proceduresVariation = $lastMonthProcedures > 0
+            ? round((($thisMonthProcedures - $lastMonthProcedures) / $lastMonthProcedures) * 100, 2)
+            : null;
+
         return response()->json([
             'total_patients' => Patient::count(),
             'total_sessions' => Procedure::count(),
             'total_procedures' => ProcedureItem::count(),
             'total_income' => Procedure::sum('total_amount'),
-            'this_month_income' => Procedure::whereMonth('procedure_date', now()->month)
-                ->whereYear('procedure_date', now()->year)
-                ->sum('total_amount'),
+
+            'this_month_income' => $thisMonthIncome,
+            'last_month_income' => $lastMonthIncome,
+            'income_variation' => $incomeVariation,
+
+            'this_month_patients' => $thisMonthPatients,
+            'last_month_patients' => $lastMonthPatients,
+            'patients_variation' => $patientsVariation,
+
+            'this_month_sessions' => $thisMonthSessions,
+            'last_month_sessions' => $lastMonthSessions,
+            'sessions_variation' => $sessionsVariation,
+
+            'this_month_procedures' => $thisMonthProcedures,
+            'last_month_procedures' => $lastMonthProcedures,
+            'procedures_variation' => $proceduresVariation,
         ]);
     }
 
