@@ -74,8 +74,7 @@ use App\Http\Controllers\API\StatsController;
             Route::prefix('stats')->group(function () {
             // Estadisticas
                 Route::get('/summary', [StatsController::class, 'summary']);
-                Route::get('/patients-by-referrer', [StatsController::class, 'patientsByReferrer']);
-                Route::get('/income-by-referrer', [StatsController::class, 'incomeByReferrer']);
+                Route::get('/referrer-stats', [StatsController::class, 'referrerStats']);
                 Route::get('/income-monthly', [StatsController::class, 'incomeMonthly']);
                 Route::get('/income-weekly', [StatsController::class, 'incomeWeekly']);
                 Route::get('/top-procedures', [StatsController::class, 'mostRequestedProcedures']);
