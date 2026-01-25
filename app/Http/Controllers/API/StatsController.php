@@ -245,23 +245,46 @@ class StatsController extends Controller
     }
 
     /**
-     * Procedimientos más realizados
+     * Top 5 procedimientos por CANTIDAD (Demanda) del mes actual
      */
-    public function mostRequestedProcedures()
+    public function topByDemand()
     {
         $data = ProcedureItem::select(
                 'item_name',
-                DB::raw('COUNT(*) as total_times'),
-                DB::raw('SUM(price) as total_income')
+                DB::raw('COUNT(*) as total_count')
             )
+            // Filtro para el mes y año en curso
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
             ->groupBy('item_name')
-            ->orderByDesc('total_times')
+            ->orderByDesc('total_count')
             ->limit(5)
             ->get();
 
         return response()->json($data);
     }
 
+    /**
+     * Top 5 procedimientos por INGRESOS (Valor) del mes actual
+     */
+    public function topByIncome()
+    {
+        $data = ProcedureItem::select(
+                'item_name',
+                DB::raw('SUM(price) as total_revenue')
+            )
+            // Filtro para el mes y año en curso
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->groupBy('item_name')
+            ->orderByDesc('total_revenue')
+            ->limit(5)
+            ->get();
+
+        return response()->json($data);
+    }
+
+    
     /**
      * Ingresos por tipo de procedimiento
      */
