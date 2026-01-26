@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -40,25 +41,40 @@ class AuthController extends Controller
 
     //Login
     public function login(Request $request)
+{
+    $request->validate([
+        'email'    => 'required|email',
+        'password' => 'required'
+    ]);
+
+    $user = User::where('email', $request->email)->first();
+
+    if (!$user || !Hash::check($request->password, $user->password)) {
+        return response()->json([
+            'message' => 'Credenciales incorrectas'
+        ], 401);
+    }
+
+    // Opcional: borrar tokens antiguos
+    $user->tokens()->delete();
+
+    $token = $user->createToken('admin-token')->plainTextToken;
+
+    return response()->json([
+        'token' => $token,
+        'user'  => $user,
+        'message' => 'Inicio de sesión exitosa'
+    ]);
+}
+
+
+    // Logout
+    public function logout(Request $request)
     {
-        $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required'
-        ]);
-
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json([
-                'message' => 'Credenciales incorrectas'
-            ], 401);
-        }
-
-        $token = $user->createToken('admin-token')->plainTextToken;
+        $request->user()->currentAccessToken()->delete();
 
         return response()->json([
-            'token' => $token,
-            'message' => 'Inicio de sesión exitosa!!'
+            'message' => 'Sesión cerrada correctamente'
         ]);
     }
 }

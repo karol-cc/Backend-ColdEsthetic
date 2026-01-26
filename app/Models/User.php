@@ -25,7 +25,8 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'cellphone',
-        'role',
+        'brand_name',
+        'brand_slug',
     ];
 
     /**
@@ -51,9 +52,9 @@ class User extends Authenticatable
         ];
     }
 
-    public function beforeAfters()
+    public function clinicalImages()
     {
-        return $this->hasMany(BeforeAfter::class);
+        return $this->hasMany(ClinicalImage::class);
     }
 
 }
