@@ -73,13 +73,14 @@ class AuthController extends Controller
     //Logout
     public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('web')->logout(); // invalida la sesión
 
+        // Opcional: invalidar también la cookie de Sanctum
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return response()->json([
-            'message' => 'Sesión cerrada correctamente'
-        ]);
+        return response()->json(['message' => 'Logged out'], 200);
     }
+
+    
 }
