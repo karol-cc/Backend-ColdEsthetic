@@ -15,11 +15,11 @@ class UpdateProcedureRequest extends FormRequest
     {
         return [
             'procedure_date' => ['sometimes', 'date'],
-            'notes' => ['sometimes', 'nullable', 'string'],
+            'notes' => ['sometimes', 'string'],
 
             // If provided, replace items completely
             'items' => ['sometimes', 'array', 'min:1'],
-            'items.*.item_name' => ['required_with:items', 'string', 'max:255'],
+            'items.*.item_name' => ['required_with:items', 'string', 'max:100'],
             'items.*.price' => ['required_with:items', 'numeric', 'min:0'],
             'items.*.meta' => ['nullable', 'array'],
         ];

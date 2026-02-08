@@ -7,6 +7,7 @@ use App\Http\Controllers\API\PatientController;
 use App\Http\Controllers\API\ProcedureController;
 use App\Http\Controllers\API\MedicalEvaluationController;
 use App\Http\Controllers\API\StatsController;
+use Illuminate\Http\Request;
 
 
 /*|--------------------------------------------------------------------------

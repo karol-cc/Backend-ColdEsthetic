@@ -11,67 +11,72 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
 
-    //Registrarse 
+    //Registrarse
     public function register(Request $request)
     {
-        $request->validate([
-            'name'       => 'required|string|max:255',
-            'first_name' => 'required|string|max:255',
-            'last_name'  => 'required|string|max:255',
-            'cellphone'  => 'required|string|max:20',
-            'email'      => 'required|email|unique:users',
-            'password'   => 'required|min:6'
-        ]);
+        try {
+            $request->validate([
+                'name'       => 'required|string|max:50',
+                'first_name' => 'required|string|max:100',
+                'last_name'  => 'required|string|max:100',
+                'cellphone'  => 'required|string|max:15',
+                'email'      => 'required|email|unique:users',
+                'password'   => 'required|min:6'
+            ]);
 
-        $user = User::create([
-            'name'       => $request->name,
-            'first_name' => $request->first_name,
-            'last_name'  => $request->last_name,
-            'cellphone'  => $request->cellphone,
-            'brand_name' => config('app.brand_name'),
-            'brand_slug' => config('app.brand_slug'),
-            'email'      => $request->email,
-            'password'   => $request->password,
-        ]);
+            $user = User::create([
+                'name'       => $request->name,
+                'first_name' => $request->first_name,
+                'last_name'  => $request->last_name,
+                'cellphone'  => $request->cellphone,
+                'brand_name' => config('app.brand_name'),
+                'brand_slug' => config('app.brand_slug'),
+                'email'      => $request->email,
+                'password'   => $request->password,
+            ]);
 
-        return response()->json([
-            'message' => 'Admin creado correctamente!!'
-        ], 201);
+            return response()->json([
+                'message' => 'Admin creado correctamente!!'
+            ], 201);
+            
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
     }
 
     //Login
     public function login(Request $request)
-{
-    $request->validate([
-        'email'    => 'required|email',
-        'password' => 'required'
-    ]);
+    {
+        try {
+            $request->validate([
+                'email'    => 'required|email',
+                'password' => 'required'
+            ]);
 
-    $user = User::where('email', $request->email)->first();
+            if (!Auth::attempt($request->only('email', 'password'))) {
+                return response()->json([
+                    'message' => 'Credenciales incorrectas'
+                ], 401);
+            }
 
-    if (!$user || !Hash::check($request->password, $user->password)) {
-        return response()->json([
-            'message' => 'Credenciales incorrectas'
-        ], 401);
+            $request->session()->regenerate();
+
+            return response()->json([
+                'user' => Auth::user(),
+                'message' => 'Inicio de sesión exitoso'
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
     }
 
-    // Opcional: borrar tokens antiguos
-    $user->tokens()->delete();
-
-    $token = $user->createToken('admin-token')->plainTextToken;
-
-    return response()->json([
-        'token' => $token,
-        'user'  => $user,
-        'message' => 'Inicio de sesión exitosa'
-    ]);
-}
-
-
-    // Logout
+    //Logout
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return response()->json([
             'message' => 'Sesión cerrada correctamente'

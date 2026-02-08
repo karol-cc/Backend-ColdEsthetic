@@ -33,7 +33,7 @@ class ClinicalImageController extends Controller
     {
         try {
             $request->validate([
-                'title' => 'required|string|max:255',
+                'title' => 'required|string|max:100',
                 'description' => 'nullable|string',
                 'before_image' => 'required|image|mimes:jpg,jpeg,png,webp',
                 'after_image' => 'required|image|mimes:jpg,jpeg,png,webp',
@@ -67,7 +67,7 @@ class ClinicalImageController extends Controller
 
             // 1. Validación flexible (nada obligatorio)
             $request->validate([
-                'title' => 'sometimes|string|max:255',
+                'title' => 'sometimes|string|max:100',
                 'description' => 'sometimes|string',
                 'before_image' => 'sometimes|image|mimes:jpg,jpeg,png,webp|max:4096',
                 'after_image' => 'sometimes|image|mimes:jpg,jpeg,png,webp|max:4096',

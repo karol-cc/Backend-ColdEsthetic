@@ -24,11 +24,11 @@ class StoreProcedureRequest extends FormRequest
 
             // Datos del procedimiento
             'procedure_date' => ['required', 'date'],
-            'notes' => ['nullable', 'string'],
+            'notes' => ['required', 'string'],
 
             // Items / tratamientos
             'items' => ['required', 'array', 'min:1'],
-            'items.*.item_name' => ['required', 'string', 'max:255'],
+            'items.*.item_name' => ['required', 'string', 'max:100'],
             'items.*.price' => ['required', 'numeric', 'min:0'],
             'items.*.meta' => ['nullable', 'array'],
         ];

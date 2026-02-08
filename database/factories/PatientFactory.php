@@ -17,13 +17,13 @@ class PatientFactory extends Factory
             'referrer_name' => $this->faker->randomElement([
                 'Dra. Adele',
                 'Dra. Fernanda',
-                'Dr. Alexander'
+                'Dra. Alexander'
             ]),
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
             'cellphone' => $this->faker->phoneNumber(),
             'age' => $this->faker->numberBetween(18, 65),
-            'biological_sex' => $this->faker->randomElement(['Female', 'Male', 'Other']),
+            'biological_sex' => $this->faker->randomElement(['Femenino', 'Masculino', 'Otro']),
         ];
     }
 }

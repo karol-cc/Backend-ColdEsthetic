@@ -31,39 +31,47 @@ class PatientController extends Controller
     // VER PACIENTE
     public function show(Patient $patient)
     {
-        $patient->load([
-            'medicalEvaluations.procedures.items',
-            'user',
-        ]);
+        try {
+            $patient->load([
+                'medicalEvaluations.procedures.items',
+                'user',
+            ]);
 
-        return response()->json($patient);
+            return response()->json($patient);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
     }
 
     // CREAR PACIENTE
     public function store(StorePatientRequest $request)
     {
-        $data = $request->validated();
+        try {
+            $data = $request->validated();
 
-        $userId = auth()->id();
-        if (!$userId) {
+            $userId = auth()->id();
+            if (!$userId) {
+                return response()->json([
+                    'message' => 'No autenticado'
+                ], 401);
+            }
+
+            $patient = Patient::create([
+                'user_id' => $userId,
+                'referrer_name' => $data['referrer_name'],
+                'first_name' => $data['first_name'],
+                'last_name' => $data['last_name'],
+                'cellphone' => $data['cellphone'],
+                'age' => (int) $data['age'],
+                'biological_sex' => $data['biological_sex'],
+            ]);
+
             return response()->json([
-                'message' => 'No autenticado'
-            ], 401);
+                'message' => 'Paciente creado correctamente',
+                'data' => $patient,
+            ], 201);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()], 500);
         }
-
-        $patient = Patient::create([
-            'user_id' => $userId,
-            'referrer_name' => $data['referrer_name'],
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'cellphone' => $data['cellphone'] ?? null,
-            'age' => (int) $data['age'],
-            'biological_sex' => $data['biological_sex'],
-        ]);
-
-        return response()->json([
-            'message' => 'Paciente creado correctamente',
-            'data' => $patient,
-        ], 201);
     }
 }

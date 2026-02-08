@@ -18,7 +18,7 @@ class Procedure extends Model
     ];
 
     /* Relaciones */
-
+    
     public function medicalEvaluation()
     {
         return $this->belongsTo(MedicalEvaluation::class);

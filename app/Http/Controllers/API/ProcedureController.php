@@ -46,50 +46,54 @@ class ProcedureController extends Controller
     // CREAR PROCEDIMIENTO
     public function store(StoreProcedureRequest $request)
     {
-        $data = $request->validated();
+        try {
+            $data = $request->validated();
 
-        $medicalEvaluation = MedicalEvaluation::findOrFail(
-            (int) $data['medical_evaluation_id']
-        );
+            $medicalEvaluation = MedicalEvaluation::findOrFail(
+                (int) $data['medical_evaluation_id']
+            );
 
-        $brandSlug = config('app.brand_slug');
+            $brandSlug = config('app.brand_slug');
 
-        $items = $data['items'];
-        $totalAmount = 0.0;
-
-        foreach ($items as $item) {
-            $totalAmount += (float) $item['price'];
-        }
-
-        $procedure = DB::transaction(function () use ($data, $items, $totalAmount, $brandSlug) {
-            $procedure = Procedure::create([
-                'medical_evaluation_id' => (int) $data['medical_evaluation_id'],
-                'brand_slug' => $brandSlug,
-                'procedure_date' => $data['procedure_date'],
-                'notes' => $data['notes'] ?? null,
-                'total_amount' => $totalAmount,
-            ]);
+            $items = $data['items'];
+            $totalAmount = 0.0;
 
             foreach ($items as $item) {
-                $procedure->items()->create([
-                    'item_name' => $item['item_name'],
-                    'price' => (float) $item['price'],
-                    'meta' => $item['meta'] ?? null,
-                ]);
+                $totalAmount += (float) $item['price'];
             }
 
-            return $procedure;
-        });
+            $procedure = DB::transaction(function () use ($data, $items, $totalAmount, $brandSlug) {
+                $procedure = Procedure::create([
+                    'medical_evaluation_id' => (int) $data['medical_evaluation_id'],
+                    'brand_slug' => $brandSlug,
+                    'procedure_date' => $data['procedure_date'],
+                    'notes' => $data['notes'],
+                    'total_amount' => $totalAmount,
+                ]);
 
-        $procedure->load([
-            'items',
-            'medicalEvaluation.patient',
-        ]);
+                foreach ($items as $item) {
+                    $procedure->items()->create([
+                        'item_name' => $item['item_name'],
+                        'price' => (float) $item['price'],
+                        'meta' => $item['meta'] ?? null,
+                    ]);
+                }
 
-        return response()->json([
-            'message' => 'Procedimiento creado correctamente',
-            'data' => $procedure,
-        ], 201);
+                return $procedure;
+            });
+
+            $procedure->load([
+                'items',
+                'medicalEvaluation.patient',
+            ]);
+
+            return response()->json([
+                'message' => 'Procedimiento creado correctamente',
+                'data' => $procedure,
+            ], 201);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
     }
 
     // ACTUALIZAR PROCEDIMIENTO

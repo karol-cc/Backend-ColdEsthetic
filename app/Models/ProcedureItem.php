@@ -20,6 +20,8 @@ class ProcedureItem extends Model
         'meta' => 'array',
     ];
 
+     /* Relaciones */
+    
     public function procedure()
     {
         return $this->belongsTo(Procedure::class);

@@ -13,33 +13,37 @@ class MedicalEvaluationController extends Controller
     // CREAR VALORACIÓN MÉDICA
     public function store(StoreMedicalEvaluationRequest $request)
     {
-        $data = $request->validated();
+        try {
+            $data = $request->validated();
 
-        $weight = $data['weight'];
-        $height = $data['height'];
+            $weight = $data['weight'];
+            $height = $data['height'];
 
-        // Calcular BMI (2 decimales)
-        $bmi = round($weight / ($height * $height), 2);
+            // Calcular BMI (2 decimales)
+            $bmi = round($weight / ($height * $height), 2);
 
-        // Calcular estado BMI
-        $bmiStatus = $this->getBmiStatus($bmi);
+            // Calcular estado BMI
+            $bmiStatus = $this->getBmiStatus($bmi);
 
-        $medicalEvaluation = DB::transaction(function () use ($data, $bmi, $bmiStatus) {
-            return MedicalEvaluation::create([
-                'user_id' => auth()->id(),
-                'patient_id' => $data['patient_id'],
-                'medical_background' => $data['medical_background'] ?? null,
-                'weight' => $data['weight'],
-                'height' => $data['height'],
-                'bmi' => $bmi,
-                'bmi_status' => $bmiStatus,
-            ]);
-        });
+            $medicalEvaluation = DB::transaction(function () use ($data, $bmi, $bmiStatus) {
+                return MedicalEvaluation::create([
+                    'user_id' => auth()->id(),
+                    'patient_id' => $data['patient_id'],
+                    'medical_background' => $data['medical_background'],
+                    'weight' => $data['weight'],
+                    'height' => $data['height'],
+                    'bmi' => $bmi,
+                    'bmi_status' => $bmiStatus,
+                ]);
+            });
 
-        return response()->json([
-            'message' => 'Valoración médica creada correctamente',
-            'data' => $medicalEvaluation->load(['patient', 'user']),
-        ], 201);
+            return response()->json([
+                'message' => 'Valoración médica creada correctamente',
+                'data' => $medicalEvaluation->load(['patient', 'user']),
+            ], 201);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
     }
 
     // ACTUALIZAR VALORACIÓN

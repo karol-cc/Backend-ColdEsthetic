@@ -35,14 +35,14 @@ class StorePatientRequest extends FormRequest
     {
         return [
             // Remitente (texto obligatorio)
-            'referrer_name' => ['required', 'string', 'max:255'],
+            'referrer_name' => ['required', 'string', 'max:50'],
 
             // Datos del paciente
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'cellphone' => ['nullable', 'string', 'max:50'],
-            'age' => ['required', 'integer', 'min:0', 'max:150'],
-            'biological_sex' => ['required', 'string', 'in:Female,Male,Other'],
+            'first_name' => ['required', 'string', 'max:100'],
+            'last_name' => ['required', 'string', 'max:100'],
+            'cellphone' => ['required', 'string', 'max:15'],
+            'age' => ['required', 'integer', 'min:0', 'max:120'],
+            'biological_sex' => ['required', 'string', 'in:Femenino,Masculino,Otro'],
         ];
     }
 }

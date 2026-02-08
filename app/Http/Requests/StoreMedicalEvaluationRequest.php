@@ -22,7 +22,7 @@ class StoreMedicalEvaluationRequest extends FormRequest
             'height' => ['required', 'numeric', 'gt:0'],
 
             // Antecedentes médicos
-            'medical_background' => ['nullable', 'string'],
+            'medical_background' => ['required', 'string'],
         ];
     }
 }
