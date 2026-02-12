@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
 
+    // Me (usuario autenticado)
+    public function me(Request $request)
+    {
+        return response()->json($request->user());
+    }
+
+
     //Registrarse
     public function register(Request $request)
     {
