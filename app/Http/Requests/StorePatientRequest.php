@@ -41,7 +41,7 @@ class StorePatientRequest extends FormRequest
             'first_name' => ['required', 'string', 'max:100'],
             'last_name' => ['required', 'string', 'max:100'],
             'cellphone' => ['required', 'string', 'max:15'],
-            'age' => ['required', 'integer', 'min:0', 'max:120'],
+            'age' => ['required', 'integer', 'min:14', 'max:120'],
             'biological_sex' => ['required', 'string', 'in:Femenino,Masculino,Otro'],
         ];
     }

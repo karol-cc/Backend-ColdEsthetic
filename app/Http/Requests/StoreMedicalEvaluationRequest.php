@@ -18,8 +18,8 @@ class StoreMedicalEvaluationRequest extends FormRequest
             'patient_id' => ['required', 'integer', 'exists:patients,id'],
 
             // Datos clínicos
-            'weight' => ['required', 'numeric', 'min:1'],
-            'height' => ['required', 'numeric', 'gt:0'],
+            'weight' => ['required', 'numeric', 'min:2', 'max:400'],
+            'height' => ['required', 'numeric', 'between:1.2,2.5'],
 
             // Antecedentes médicos
             'medical_background' => ['required', 'string'],
