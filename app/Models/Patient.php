@@ -11,25 +11,19 @@ class Patient extends Model
 
     protected $fillable = [
         'user_id',
+        'referrer_name',
         'first_name',
         'last_name',
         'cellphone',
         'age',
-        'weight',
-        'height',
-        'bmi',
-        'medical_background',
+        'biological_sex',
     ];
 
-    // 🔗 Relaciones
+    /* Relaciones */
+
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function procedures()
-    {
-        return $this->hasMany(Procedure::class);
     }
 
     public function medicalEvaluations()

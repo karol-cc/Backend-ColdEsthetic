@@ -6,12 +6,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -25,7 +24,8 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'cellphone',
-        'role',
+        'brand_name',
+        'brand_slug',
     ];
 
     /**
@@ -51,9 +51,11 @@ class User extends Authenticatable
         ];
     }
 
-    public function beforeAfters()
+     /* Relaciones */
+    
+    public function clinicalImages()
     {
-        return $this->hasMany(BeforeAfter::class);
+        return $this->hasMany(ClinicalImage::class);
     }
 
 }

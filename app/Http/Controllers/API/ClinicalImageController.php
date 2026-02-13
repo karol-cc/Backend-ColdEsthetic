@@ -13,8 +13,9 @@ class ClinicalImageController extends Controller
     public function index()
     {
         try {
-            $data = BeforeAfter::select(
+            $data = ClinicalImage::select(
                 'id',
+                'title',
                 'before_image',
                 'after_image',
                 'description',
@@ -32,19 +33,19 @@ class ClinicalImageController extends Controller
     {
         try {
             $request->validate([
-                'title' => 'required|string|max:255',
+                'title' => 'required|string|max:100',
                 'description' => 'nullable|string',
                 'before_image' => 'required|image|mimes:jpg,jpeg,png,webp',
                 'after_image' => 'required|image|mimes:jpg,jpeg,png,webp',
             ]);
 
             $beforePath = $request->file('before_image')
-                ->store('before-after', 'public');
+                ->store('clinical-images', 'public');
 
             $afterPath = $request->file('after_image')
-                ->store('before-after', 'public');
+                ->store('clinical-images', 'public');
 
-            $beforeAfter = BeforeAfter::create([
+            $clinicalImage = ClinicalImage::create([
                 'title' => $request->title,
                 'description' => $request->description,
                 'before_image' => $beforePath,
@@ -52,7 +53,7 @@ class ClinicalImageController extends Controller
                 'user_id' => auth()->id(),
             ]);
 
-            return response()->json($beforeAfter, 200);
+            return response()->json($clinicalImage, 200);
         } catch (\Throwable $th) {
             return response()->json(['error' => $th->getMessage()], 500);
         }
@@ -62,11 +63,11 @@ class ClinicalImageController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $item = BeforeAfter::findOrFail($id);
+            $item = ClinicalImage::findOrFail($id);
 
             // 1. Validación flexible (nada obligatorio)
             $request->validate([
-                'title' => 'sometimes|string|max:255',
+                'title' => 'sometimes|string|max:100',
                 'description' => 'sometimes|string',
                 'before_image' => 'sometimes|image|mimes:jpg,jpeg,png,webp|max:4096',
                 'after_image' => 'sometimes|image|mimes:jpg,jpeg,png,webp|max:4096',
@@ -85,7 +86,7 @@ class ClinicalImageController extends Controller
                 Storage::disk('public')->delete($item->before_image);
                 $item->before_image = $request
                     ->file('before_image')
-                    ->store('before-after', 'public');
+                    ->store('clinical-images', 'public');
             }
 
             // 4. Reemplazar imagen AFTER
@@ -93,7 +94,7 @@ class ClinicalImageController extends Controller
                 Storage::disk('public')->delete($item->after_image);
                 $item->after_image = $request
                     ->file('after_image')
-                    ->store('before-after', 'public');
+                    ->store('clinical-images', 'public');
             }
 
             // 5. Guardar cambios
@@ -112,7 +113,7 @@ class ClinicalImageController extends Controller
     public function destroy($id)
     {
         try {
-            $item = BeforeAfter::findOrFail($id);
+            $item = ClinicalImage::findOrFail($id);
 
             Storage::disk('public')->delete([
                 $item->before_image,

@@ -12,13 +12,14 @@ class MedicalEvaluation extends Model
     protected $fillable = [
         'user_id',
         'patient_id',
-        'evaluation_data',
-        'notes',
+        'medical_background',
+        'weight',
+        'height',
+        'bmi',
+        'bmi_status',
     ];
 
-    protected $casts = [
-        'evaluation_data' => 'array', 
-    ];
+    /* Relaciones */
 
     public function user()
     {
@@ -28,5 +29,10 @@ class MedicalEvaluation extends Model
     public function patient()
     {
         return $this->belongsTo(Patient::class);
+    }
+
+    public function procedures()
+    {
+        return $this->hasMany(Procedure::class);
     }
 }

@@ -3,6 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\API\ClinicalImageController;
+use App\Http\Controllers\API\PatientController;
+use App\Http\Controllers\API\ProcedureController;
+use App\Http\Controllers\API\MedicalEvaluationController;
+use App\Http\Controllers\API\StatsController;
+use Illuminate\Http\Request;
 
 
 /*|--------------------------------------------------------------------------
@@ -15,32 +20,65 @@ use App\Http\Controllers\API\ClinicalImageController;
 |
 */
 
+    Route::prefix('v1')->group(function () {
 
-/*-------------------------------------------------------*/
-// Ruta de prueba simple 
-Route::get('/test', function () {
-    return response()->json([
-        'message' => 'API Cold Esthetic funcionando',
-        'version' => 'v1'
-    ]);
-});
-/*-------------------------------------------------------*/
-
-
-Route::prefix('v1')->group(function () {
-
+    // ======================
     // Rutas públicas
-    Route::get('/before-after', [ClinicalImageController::class, 'index']);
+    // ======================
+        Route::get('/test', function () {
+            return response()->json([
+                'message' => 'API Cold Esthetic funcionando',
+                'version' => 'v1'
+            ]);
+        });
 
-    // Register y Login ADMIN
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/login', [AuthController::class, 'login']);
+        Route::get('/clinical-images', [ClinicalImageController::class, 'index']);
 
-    // Rutas admin
-    Route::middleware('auth:sanctum')->group(function () {
-        //Imágenes Clínicas
-        Route::post('/before-after', [ClinicalImageController::class, 'store']);
-        Route::put('/before-after/{id}', [ClinicalImageController::class, 'update']);
-        Route::delete('/before-after/{id}', [ClinicalImageController::class, 'destroy']);
-    });
+        // ======================
+        // Auth
+        // ======================
+        Route::post('/register', [AuthController::class, 'register']);
+        Route::post('/login', [AuthController::class, 'login']);
+
+        // ======================
+        // Rutas protegidas
+        // ======================
+        Route::middleware('auth:sanctum')->group(function () {
+
+            Route::get('/me', [AuthController::class, 'me']);
+            Route::post('/logout', [AuthController::class, 'logout']);
+
+            // Imágenes clínicas
+            Route::post('/clinical-images', [ClinicalImageController::class, 'store']);
+            Route::put('/clinical-images/{id}', [ClinicalImageController::class, 'update']);
+            Route::delete('/clinical-images/{id}', [ClinicalImageController::class, 'destroy']);
+
+            // Pacientes
+            Route::get('/patients', [PatientController::class, 'index']);
+            Route::get('/patients/{patient}', [PatientController::class, 'show']);
+            Route::post('/patients', [PatientController::class, 'store']);
+
+            // Valoraciones
+            Route::get('/medical-evaluation/patient/{patient}',[MedicalEvaluationController::class, 'showByPatient']);
+            Route::post('/medical-evaluations', [MedicalEvaluationController::class, 'store']);
+            Route::put('/medical-evaluations/{medicalEvaluation}', [MedicalEvaluationController::class, 'update']);
+
+            // Procedimientos
+            Route::get('/procedures', [ProcedureController::class, 'index']);
+            Route::get('/procedures/{procedure}', [ProcedureController::class, 'show']);
+            Route::post('/procedures', [ProcedureController::class, 'store']);
+            Route::put('/procedures/{procedure}', [ProcedureController::class, 'update']);
+
+            Route::prefix('stats')->group(function () {
+            // Estadisticas
+                Route::get('/summary', [StatsController::class, 'summary']);
+                Route::get('/referrer-stats', [StatsController::class, 'referrerStats']);
+                Route::get('/income-monthly', [StatsController::class, 'incomeMonthly']);
+                Route::get('/income-weekly', [StatsController::class, 'incomeWeekly']);
+                Route::get('/procedures/top-demand', [StatsController::class, 'topByDemand']);
+                Route::get('/procedures/top-income', [StatsController::class, 'topByIncome']);
+                Route::get('/income-by-procedure', [StatsController::class, 'incomeByProcedureType']);
+            });
+        });
 });
+

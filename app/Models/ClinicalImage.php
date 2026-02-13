@@ -17,6 +17,8 @@ class ClinicalImage extends Model
         'after_image',
     ];
 
+     /* Relaciones */
+    
     public function user()
     {
         return $this->belongsTo(User::class);
