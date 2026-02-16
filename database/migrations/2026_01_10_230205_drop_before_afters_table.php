@@ -11,17 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::dropIfExists('before_afters');
-    }
+        Schema::create('before_afters', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->string('before_image');
+            $table->string('after_image');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+        });
+    }   
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::create('before_afters', function (Blueprint $table) {
-        $table->id();
-        $table->timestamps();
-    });
+        Schema::dropIfExists('before_afters');
     }
 };
