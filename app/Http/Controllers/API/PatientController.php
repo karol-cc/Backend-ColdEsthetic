@@ -19,7 +19,8 @@ class PatientController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('first_name', 'like', "%{$search}%")
                 ->orWhere('last_name', 'like', "%{$search}%")
-                ->orWhere('cellphone', 'like', "%{$search}%");
+                ->orWhere('cellphone', 'like', "%{$search}%")
+                ->orWhere('cedula', 'like', "%{$search}%");
             });
         }
 
@@ -64,6 +65,7 @@ class PatientController extends Controller
                 'cellphone' => $data['cellphone'],
                 'age' => (int) $data['age'],
                 'biological_sex' => $data['biological_sex'],
+                'cedula' => $data['cedula'],
             ]);
 
             return response()->json([

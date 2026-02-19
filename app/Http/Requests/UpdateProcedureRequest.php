@@ -21,7 +21,6 @@ class UpdateProcedureRequest extends FormRequest
             'items' => ['sometimes', 'array', 'min:1'],
             'items.*.item_name' => ['required_with:items', 'string', 'max:100'],
             'items.*.price' => ['required_with:items', 'numeric', 'min:0'],
-            'items.*.meta' => ['nullable', 'array'],
         ];
     }
 }

@@ -30,7 +30,6 @@ class StoreProcedureRequest extends FormRequest
             'items' => ['required', 'array', 'min:1'],
             'items.*.item_name' => ['required', 'string', 'max:100'],
             'items.*.price' => ['required', 'numeric', 'min:0'],
-            'items.*.meta' => ['nullable', 'array'],
         ];
     }
 }

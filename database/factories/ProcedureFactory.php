@@ -17,7 +17,7 @@ class ProcedureFactory extends Factory
             'procedure_date' => $this->faker->date(),
             'total_amount' => $this->faker->numberBetween(100, 1000),
             'brand_slug' => config('app.brand_slug'), 
-            'notes' => $this->faker->optional()->sentence(),
+            'notes' => $this->faker->sentence(),
         ];
     }
 }

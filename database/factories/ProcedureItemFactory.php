@@ -24,7 +24,6 @@ class ProcedureItemFactory extends Factory
                 'Láser Básico'
             ]),
             'price' => $this->faker->randomFloat(2, 100, 800),
-            'meta' => null,
         ];
     }
 }

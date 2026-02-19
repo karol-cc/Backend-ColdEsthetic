@@ -43,6 +43,7 @@ class StorePatientRequest extends FormRequest
             'cellphone' => ['required', 'string', 'max:15'],
             'age' => ['required', 'integer', 'min:14', 'max:120'],
             'biological_sex' => ['required', 'string', 'in:Femenino,Masculino,Otro'],
+            'cedula' => [ 'required', 'string', 'max:15', 'unique:patients,cedula', 'regex:/^[0-9]{10}$/'],
         ];
     }
 }

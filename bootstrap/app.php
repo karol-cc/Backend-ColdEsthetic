@@ -7,6 +7,7 @@ use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
+use App\Http\Middleware\AdminMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -25,6 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
         //Alias necesarios
         $middleware->alias([
             'auth' => Authenticate::class,
+            'admin' => AdminMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
