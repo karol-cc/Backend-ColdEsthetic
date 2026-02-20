@@ -18,7 +18,7 @@ class UserFactory extends Factory
             'cellphone' => $this->faker->numerify('##########'), // 10 dígitos
             'brand_name' => config('app.brand_name'), 
             'brand_slug' => config('app.brand_slug'), 
-            'name' => $this->faker->name(),
+            'name' => $this->faker->unique()->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'password' => Hash::make('password'), // simple para pruebas
             'role' => User::ROLE_REMITENTE,

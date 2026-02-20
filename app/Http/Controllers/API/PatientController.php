@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePatientRequest;
 use App\Models\Patient;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PatientController extends Controller
@@ -44,33 +45,40 @@ class PatientController extends Controller
         }
     }
 
-    // CREAR PACIENTE
+   // CREAR PACIENTE
     public function store(StorePatientRequest $request)
     {
         try {
             $data = $request->validated();
 
-            $userId = auth()->id();
-            if (!$userId) {
+            $user = auth()->user(); // obtenemos el usuario autenticado
+            if (!$user) {
                 return response()->json([
                     'message' => 'No autenticado'
                 ], 401);
             }
 
+            // Bloquear si está inactivo o despedido
+            if ($user->status !== User::STATUS_ACTIVE) {
+                return response()->json([
+                    'message' => 'Tu cuenta no está activa. No puedes registrar pacientes.'
+                ], 403);
+            }
+
             $patient = Patient::create([
-                'user_id' => $userId,
-                'referrer_name' => $data['referrer_name'],
-                'first_name' => $data['first_name'],
-                'last_name' => $data['last_name'],
-                'cellphone' => $data['cellphone'],
-                'age' => (int) $data['age'],
-                'biological_sex' => $data['biological_sex'],
-                'cedula' => $data['cedula'],
+                'user_id'       => $user->id,
+                'referrer_name' => $user->name, // automático
+                'first_name'    => $data['first_name'],
+                'last_name'     => $data['last_name'],
+                'cellphone'     => $data['cellphone'],
+                'age'           => (int) $data['age'],
+                'biological_sex'=> $data['biological_sex'],
+                'cedula'        => $data['cedula'],
             ]);
 
             return response()->json([
                 'message' => 'Paciente creado correctamente',
-                'data' => $patient,
+                'data'    => $patient,
             ], 201);
         } catch (\Throwable $th) {
             return response()->json(['error' => $th->getMessage()], 500);
