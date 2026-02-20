@@ -12,13 +12,12 @@ class PatientFactory extends Factory
 
     public function definition()
     {
+        // Seleccionamos un usuario aleatorio 
+        $user = User::inRandomOrder()->first();
+
         return [
-            'user_id' => User::inRandomOrder()->first()?->id,
-            'referrer_name' => $this->faker->randomElement([
-                'Dra. Adele',
-                'Dra. Fernanda',
-                'Dra. Alexander'
-            ]),
+            'user_id' => $user?->id,
+            'referrer_name' => $user?->name, // ahora se usa el name del remitente
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
             'cellphone' => $this->faker->numerify('##########'), // 10 dígitos

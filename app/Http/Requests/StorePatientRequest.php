@@ -13,10 +13,6 @@ class StorePatientRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        $this->merge([
-            'referrer_name' => trim((string) $this->input('referrer_name', '')),
-        ]);
-
         $fullName = trim((string) $this->input('full_name', ''));
 
         if ($fullName !== '' && (!$this->has('first_name') || !$this->has('last_name'))) {
@@ -34,9 +30,6 @@ class StorePatientRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // Remitente (texto obligatorio)
-            'referrer_name' => ['required', 'string', 'max:50'],
-
             // Datos del paciente
             'first_name' => ['required', 'string', 'max:100'],
             'last_name' => ['required', 'string', 'max:100'],

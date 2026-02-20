@@ -30,7 +30,7 @@ class UserController extends Controller
 
             // Validación
             $request->validate([
-                'name'     => 'sometimes|string|max:50',
+                'name' => 'sometimes|string|max:50|unique:users,name,' . $id,
                 'first_name' => 'sometimes|string|max:100',
                 'last_name'  => 'sometimes|string|max:100',
                 'email'    => 'sometimes|email|unique:users,email,' . $id,
@@ -75,7 +75,7 @@ class UserController extends Controller
     {
         try {
             $request->validate([
-                'name'       => 'required|string|max:50',
+                'name' => 'required|string|max:50|unique:users,name,',
                 'first_name' => 'required|string|max:100',
                 'last_name'  => 'required|string|max:100',
                 'cellphone'  => 'required|string|max:15',
@@ -128,7 +128,7 @@ class UserController extends Controller
 
             // Validación
             $request->validate([
-                'name'       => 'sometimes|string|max:50',
+                'name' => 'sometimes|string|max:50|unique:users,name,' . $id,
                 'first_name' => 'sometimes|string|max:100',
                 'last_name'  => 'sometimes|string|max:100',
                 'cellphone'  => 'sometimes|string|max:15',

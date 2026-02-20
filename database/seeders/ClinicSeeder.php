@@ -45,12 +45,21 @@ class ClinicSeeder extends Seeder
             ->concat($remitentesInactivos)
             ->concat($remitentesDespedidos);
 
-        // Pacientes asociados al admin (o a remitentes aleatorios)
-        $patients = Patient::factory()
-            ->count(30)
-            ->create([
-                'user_id' => $admin->id, // admin
-            ]);
+            // Pacientes del admin
+            $patientsAdmin = Patient::factory() 
+                ->count(10) 
+                ->create([ 
+                    'user_id' => $admin->id, 
+                    'referrer_name' => $admin->name, 
+                ]);
+
+            // Pacientes de remitentes activos
+            $patientsRemitentes = Patient::factory() 
+                ->count(20) 
+                ->create();
+
+            // Unir ambas colecciones 
+            $patients = $patientsAdmin->concat($patientsRemitentes);
 
         foreach ($patients as $patient) {
             // Cada paciente tiene 1–2 evaluaciones médicas
