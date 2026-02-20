@@ -9,6 +9,7 @@ class ClinicalImage extends Model
 {
     use HasFactory;
 
+    // Atributos
     protected $fillable = [
         'user_id',
         'title',
@@ -18,7 +19,6 @@ class ClinicalImage extends Model
     ];
 
      /* Relaciones */
-    
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -9,6 +9,7 @@ class MedicalEvaluation extends Model
 {
     use HasFactory;
 
+    // Atributos
     protected $fillable = [
         'user_id',
         'patient_id',
@@ -20,7 +21,6 @@ class MedicalEvaluation extends Model
     ];
 
     /* Relaciones */
-
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -9,6 +9,7 @@ class Procedure extends Model
 {
     use HasFactory;
 
+    // Atributos
     protected $fillable = [
         'medical_evaluation_id',
         'brand_slug',
@@ -18,7 +19,6 @@ class Procedure extends Model
     ];
 
     /* Relaciones */
-    
     public function medicalEvaluation()
     {
         return $this->belongsTo(MedicalEvaluation::class);

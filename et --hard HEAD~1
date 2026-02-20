@@ -1,0 +1,30 @@
+[33m206f68b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/clinic-backend[m[33m, [m[1;31morigin/pruebas[m[33m)[m arrelgo redundancia y agregar sistema citas googlecalendar
+[33m4fd91e3[m[33m ([m[1;31morigin/main[m[33m)[m feat: Sistema de gestion de imagenes antes/despues
+[33m9ff4566[m Merge pull request #1 from karol-cc/feature/clinic-backend
+[33m486fee7[m[33m ([m[1;31morigin/feature/clinic-backend[m[33m)[m cambio request, este alienado con el frontend
+[33m5cae4e6[m cambio en bootstrap
+[33m89134aa[m cambios, arreglos login-me
+[33m2daab15[m arreglo cookies httponly
+[33m8f63cbf[m cookies + spa, cambios en campos de las tablas
+[33m26bb72b[m cambios stats
+[33m588c462[m cambios stats
+[33maf02a6f[m cambios statscontroller
+[33m5f376ad[m cambios
+[33md856b85[m cambios
+[33m92f671a[m Backend funcional: migraciones, seeders y endpoints
+[33m6d2b1c0[m[33m ([m[1;31morigin/feature/backend-erd-align[m[33m, [m[1;32morigin[m[33m, [m[1;32mmain[m[33m)[m diagrama
+[33m62b93dc[m Add MySQL setup docs/scripts and env example
+[33m3c4816f[m Require free-text patient referrer_name; set creator from auth
+[33mf76055d[m Add patients/procedures/evaluations API with validation and total calculation
+[33mdac66b2[m Align backend schema with ERD; fix clinical images; add patients endpoint
+[33m2ca9859[m modi readme
+[33m6412a00[m Revise project description and features in README
+[33mfa14d36[m Fix README title formatting
+[33m0730a66[m Controllers terminados (Auth - ClinicalImage) y Backend organizado
+[33mdcf17c9[m Agregar models y estructura database
+[33m0886158[m[33m ([m[1;32mstatus[m[33m)[m Update api.php
+[33ma2ae306[m update backend coldesthetic
+[33m599966b[m Inicializando Backend Cold Esthetic
+[33m16095bc[m update README
+[33mff7fc2d[m update README
+[33mb7b60ec[m Nuevo backend Laravel - Perfect Esthetic

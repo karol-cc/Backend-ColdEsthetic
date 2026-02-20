@@ -25,9 +25,9 @@ use Illuminate\Http\Request;
 
     Route::prefix('v1')->group(function () {
 
-    // ======================
-    // Rutas públicas
-    // ======================
+        // ======================
+        // Rutas públicas
+        // ======================
         Route::get('/test', function () {
             return response()->json([
                 'message' => 'API Cold Esthetic funcionando',
@@ -40,12 +40,23 @@ use Illuminate\Http\Request;
         // ======================
         // Auth
         // ======================
-        Route::post('/register', [AuthController::class, 'register']);
         Route::post('/login', [AuthController::class, 'login']);
 
         // ======================
         // Rutas protegidas
         // ======================
+        Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+
+            // Admin 
+            Route::get('/remitentes', [UserController::class, 'listRemitentes']);
+            Route::post('/remitentes', [UserController::class, 'createRemitente']);
+            Route::put('/admin/{id}', [UserController::class, 'updateAdmin']);
+            Route::put('/remitentes/{id}', [UserController::class, 'updateRemitente']);
+            Route::patch('/remitentes/{id}/activar', [UserController::class, 'activarRemitente']);
+            Route::patch('/remitentes/{id}/inactivar', [UserController::class, 'inactivarRemitente']);
+            Route::patch('/remitentes/{id}/despedir', [UserController::class, 'despedirRemitente']);
+        });
+
         Route::middleware('auth:sanctum')->group(function () {
 
             Route::get('/me', [AuthController::class, 'me']);

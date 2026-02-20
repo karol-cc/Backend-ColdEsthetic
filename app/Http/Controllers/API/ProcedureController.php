@@ -75,7 +75,6 @@ class ProcedureController extends Controller
                     $procedure->items()->create([
                         'item_name' => $item['item_name'],
                         'price' => (float) $item['price'],
-                        'meta' => $item['meta'] ?? null,
                     ]);
                 }
 
@@ -120,7 +119,6 @@ class ProcedureController extends Controller
                     $procedure->items()->create([
                         'item_name' => $item['item_name'],
                         'price' => (float) $item['price'],
-                        'meta' => $item['meta'] ?? null,
                     ]);
                 }
 

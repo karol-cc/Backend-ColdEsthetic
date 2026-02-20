@@ -17,41 +17,7 @@ class AuthController extends Controller
         return response()->json($request->user());
     }
 
-
-    //Registrarse
-    public function register(Request $request)
-    {
-        try {
-            $request->validate([
-                'name'       => 'required|string|max:50',
-                'first_name' => 'required|string|max:100',
-                'last_name'  => 'required|string|max:100',
-                'cellphone'  => 'required|string|max:15',
-                'email'      => 'required|email|unique:users',
-                'password'   => 'required|min:6'
-            ]);
-
-            $user = User::create([
-                'name'       => $request->name,
-                'first_name' => $request->first_name,
-                'last_name'  => $request->last_name,
-                'cellphone'  => $request->cellphone,
-                'brand_name' => config('app.brand_name'),
-                'brand_slug' => config('app.brand_slug'),
-                'email'      => $request->email,
-                'password'   => $request->password,
-            ]);
-
-            return response()->json([
-                'message' => 'Admin creado correctamente!!'
-            ], 201);
-            
-        } catch (\Throwable $th) {
-            return response()->json(['error' => $th->getMessage()], 500);
-        }
-    }
-
-    //Login
+    // Login
     public function login(Request $request)
     {
         try {
@@ -66,6 +32,16 @@ class AuthController extends Controller
                 ], 401);
             }
 
+            $user = Auth::user();
+
+        // Verificar si el remitente está activo
+        if ($user->status !== User::STATUS_ACTIVE) {
+            Auth::logout();
+            return response()->json([
+                'message' => 'Tu cuenta no está activa.'
+            ], 403);
+        }
+
             $request->session()->regenerate();
 
             return response()->json([
@@ -77,7 +53,7 @@ class AuthController extends Controller
         }
     }
 
-    //Logout
+    // Log out
     public function logout(Request $request)
     {
         Auth::guard('web')->logout(); // invalida la sesión
@@ -88,6 +64,4 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Logged out'], 200);
     }
-
-    
 }

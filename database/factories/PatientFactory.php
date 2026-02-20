@@ -21,9 +21,10 @@ class PatientFactory extends Factory
             ]),
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
-            'cellphone' => $this->faker->phoneNumber(),
+            'cellphone' => $this->faker->numerify('##########'), // 10 dígitos
             'age' => $this->faker->numberBetween(18, 65),
             'biological_sex' => $this->faker->randomElement(['Femenino', 'Masculino', 'Otro']),
+            'cedula' => $this->faker->unique()->numerify('##########'),
         ];
     }
 }
