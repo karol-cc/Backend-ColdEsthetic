@@ -14,13 +14,9 @@ class UpdateMedicalEvaluationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'weight' => ['required', 'numeric', 'min:1'],
-            'height' => ['required', 'numeric', 'gt:0'],
-
-            'bmi' => ['required', 'numeric', 'gt:0'],
-            'bmi_status' => ['required', 'string', 'max:50'],
-
-            'medical_background' => ['required', 'string'],
+            'weight' => ['sometimes', 'numeric', 'min:1'],
+            'height' => ['sometimes', 'numeric', 'gt:0'],
+            'medical_background' => ['sometimes', 'string'],
         ];
     }
 }

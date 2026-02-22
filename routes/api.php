@@ -76,6 +76,8 @@ use Illuminate\Http\Request;
             Route::get('/medical-evaluation/patient/{patient}',[MedicalEvaluationController::class, 'showByPatient']);
             Route::post('/medical-evaluations', [MedicalEvaluationController::class, 'store']);
             Route::put('/medical-evaluations/{medicalEvaluation}', [MedicalEvaluationController::class, 'update']);
+            Route::patch('/medical-evaluations/{medicalEvaluation}/confirmar', [MedicalEvaluationController::class, 'confirmar']);
+            Route::patch('/medical-evaluations/{medicalEvaluation}/cancelar', [MedicalEvaluationController::class, 'cancelar']);
 
             // Procedimientos
             Route::get('/procedures', [ProcedureController::class, 'index']);

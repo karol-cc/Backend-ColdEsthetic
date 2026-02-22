@@ -41,6 +41,7 @@ class MedicalEvaluationFactory extends Factory
             'height' => $height,
             'bmi' => $bmi,
             'bmi_status' => $bmiStatus,
+            'status' => MedicalEvaluation::STATUS_EN_ESPERA,
         ];
     }
 }
