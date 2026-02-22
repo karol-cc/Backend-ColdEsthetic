@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
+// TODO: Descomentar cuando se retome el módulo de citas
+// use App\Http\Controllers\Auth\GoogleCalendarAuthController;
+// use App\Http\Controllers\API\AppointmentController;
 use App\Http\Controllers\API\ClinicalImageController;
 use App\Http\Controllers\API\PatientController;
 use App\Http\Controllers\API\ProcedureController;
@@ -73,12 +76,34 @@ use Illuminate\Http\Request;
             Route::get('/medical-evaluation/patient/{patient}',[MedicalEvaluationController::class, 'showByPatient']);
             Route::post('/medical-evaluations', [MedicalEvaluationController::class, 'store']);
             Route::put('/medical-evaluations/{medicalEvaluation}', [MedicalEvaluationController::class, 'update']);
+            Route::patch('/medical-evaluations/{medicalEvaluation}/confirmar', [MedicalEvaluationController::class, 'confirmar']);
+            Route::patch('/medical-evaluations/{medicalEvaluation}/cancelar', [MedicalEvaluationController::class, 'cancelar']);
 
             // Procedimientos
             Route::get('/procedures', [ProcedureController::class, 'index']);
             Route::get('/procedures/{procedure}', [ProcedureController::class, 'show']);
             Route::post('/procedures', [ProcedureController::class, 'store']);
             Route::put('/procedures/{procedure}', [ProcedureController::class, 'update']);
+
+            // TODO: Descomentar cuando se retome el módulo de citas y Google Calendar
+            // // Google Calendar Authentication
+            // Route::prefix('google')->group(function () {
+            //     Route::get('/auth', [GoogleCalendarAuthController::class, 'redirectToGoogle']);
+            //     Route::get('/callback', [GoogleCalendarAuthController::class, 'handleCallback']);
+            //     Route::get('/status', [GoogleCalendarAuthController::class, 'getStatus']);
+            //     Route::post('/disconnect', [GoogleCalendarAuthController::class, 'disconnect']);
+            // });
+
+            // // Appointments (Citas)
+            // Route::prefix('appointments')->group(function () {
+            //     Route::get('/', [AppointmentController::class, 'index']);
+            //     Route::get('/upcoming', [AppointmentController::class, 'upcoming']);
+            //     Route::get('/{appointment}', [AppointmentController::class, 'show']);
+            //     Route::post('/', [AppointmentController::class, 'store']);
+            //     Route::put('/{appointment}', [AppointmentController::class, 'update']);
+            //     Route::delete('/{appointment}', [AppointmentController::class, 'destroy']);
+            //     Route::post('/{appointment}/complete', [AppointmentController::class, 'completeAppointment']);
+            // });
 
             Route::prefix('stats')->group(function () {
             // Estadisticas
